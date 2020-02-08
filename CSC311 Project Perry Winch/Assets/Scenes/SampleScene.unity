@@ -121,6 +121,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &98733934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 98733936}
+  - component: {fileID: 98733935}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &98733935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98733934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a7e1ba17159d04599633bcd653a2b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+--- !u!4 &98733936
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98733934}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.331314, y: 1.5169538, z: -3.1390448}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,6 +372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65554e2ddf9703469c9c27168a07b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
 --- !u!1001 &1353288561
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -484,6 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65554e2ddf9703469c9c27168a07b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
 --- !u!1001 &1779871354
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -565,10 +611,35 @@ PrefabInstance:
       propertyPath: m_Name
       value: Environment
       objectReference: {fileID: 0}
+    - target: {fileID: 399877685562560510, guid: 72c5367042f79054bacdea7e9a0fc6e1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 630639827652310680, guid: 72c5367042f79054bacdea7e9a0fc6e1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1135062408860224360, guid: 72c5367042f79054bacdea7e9a0fc6e1,
         type: 3}
       propertyPath: m_LocalScale.y
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2753309550895935216, guid: 72c5367042f79054bacdea7e9a0fc6e1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2776454145167604036, guid: 72c5367042f79054bacdea7e9a0fc6e1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4175680362996892163, guid: 72c5367042f79054bacdea7e9a0fc6e1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5340300427110190867, guid: 72c5367042f79054bacdea7e9a0fc6e1,
         type: 3}
@@ -639,6 +710,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8848547028828968497, guid: 72c5367042f79054bacdea7e9a0fc6e1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72c5367042f79054bacdea7e9a0fc6e1, type: 3}
@@ -926,6 +1002,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 55601263, guid: d66871bdee6f70d4d86ca14d2718ef6a, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 55601263, guid: d66871bdee6f70d4d86ca14d2718ef6a, type: 3}
+      propertyPath: bullet
+      value: 
+      objectReference: {fileID: 9012877796701809361, guid: ec64876535f8ef84a9177c6ff543e409,
+        type: 3}
     - target: {fileID: 2862352505462461396, guid: d66871bdee6f70d4d86ca14d2718ef6a,
         type: 3}
       propertyPath: m_Name

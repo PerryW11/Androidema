@@ -5,9 +5,11 @@ using UnityEngine;
 public class ItemBehavior : MonoBehaviour
 {
     // Start is called before the first frame update
+
+    public GameBehavior gameManager;
     void Start()
     {
-        
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
     void OnCollisionEnter(Collision collision)
     {
