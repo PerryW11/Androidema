@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
-    // Start is called before the first frame update
-    
     public float moveSpeed = 10f;
     public float rotateSpeed = 75f;
     public float jumpVelocity = 5f;
@@ -23,11 +21,24 @@ public class PlayerBehavior : MonoBehaviour
     private Rigidbody _rb;
 
     private CapsuleCollider _col;
+
+    private GameBehavior _gameManager;
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
+
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name == "Enemy")
+        {
+            _gameManager.Lives -= 1;
+        }
+    }
+
     void Update()
     {
         vInput = Input.GetAxis("Vertical") * moveSpeed;
@@ -53,14 +64,14 @@ public class PlayerBehavior : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            // 3
+           
             GameObject newBullet = Instantiate(bullet,
             this.transform.position,
             this.transform.rotation) as GameObject;
-            // 4
+           
             Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>
             ();
-            // 5
+           
             bulletRB.velocity = this.transform.forward *
             bulletSpeed;
         }
