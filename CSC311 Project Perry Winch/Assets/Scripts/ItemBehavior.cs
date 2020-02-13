@@ -23,10 +23,4 @@ public class ItemBehavior : MonoBehaviour
             gameManager.Items += 1;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
