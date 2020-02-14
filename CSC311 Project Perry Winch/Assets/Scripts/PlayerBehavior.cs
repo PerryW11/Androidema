@@ -23,6 +23,7 @@ public class PlayerBehavior : MonoBehaviour
     private CapsuleCollider _col;
 
     private GameBehavior _gameManager;
+ 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
@@ -49,6 +50,13 @@ public class PlayerBehavior : MonoBehaviour
         {
             _rb.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject newBullet = Instantiate(bullet, this.transform.position + (this.transform.forward * 1.2f), this.transform.rotation) as GameObject;
+            Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
+            bulletRB.velocity = this.transform.forward * bulletSpeed;
+        }
     }
     void FixedUpdate()
         {
@@ -62,19 +70,7 @@ public class PlayerBehavior : MonoBehaviour
       
             _rb.MoveRotation(_rb.rotation * angleRot);
 
-        if (Input.GetMouseButtonDown(0))
-        {
-           
-            GameObject newBullet = Instantiate(bullet,
-            this.transform.position,
-            this.transform.rotation) as GameObject;
-           
-            Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>
-            ();
-           
-            bulletRB.velocity = this.transform.forward *
-            bulletSpeed;
-        }
+       
     }
 
     private bool IsGrounded()
