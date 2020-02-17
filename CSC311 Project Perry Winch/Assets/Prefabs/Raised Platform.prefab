@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6310647308193483006}
   - component: {fileID: 6310647308193483007}
   - component: {fileID: 6310647308193483000}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ramp (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6310647308428051306}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Raised Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 6310647308483202455}
   - component: {fileID: 6310647308483202448}
   - component: {fileID: 6310647308483202449}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 6310647308568200132}
   - component: {fileID: 6310647308568200133}
   - component: {fileID: 6310647308568200134}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ramp (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -328,7 +328,7 @@ GameObject:
   - component: {fileID: 6310647308640048859}
   - component: {fileID: 6310647308640048852}
   - component: {fileID: 6310647308640048853}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ramp (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -422,7 +422,7 @@ GameObject:
   - component: {fileID: 6310647309369057589}
   - component: {fileID: 6310647309369057590}
   - component: {fileID: 6310647309369057591}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ramp (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

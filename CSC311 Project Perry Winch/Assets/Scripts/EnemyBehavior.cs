@@ -83,7 +83,7 @@ public class EnemyBehavior : MonoBehaviour
         if (collision.gameObject.name == "Bullet(Clone)")
         {
             EnemyLives -= 1;
-            Debug.Log("Critical hit!");
+            Debug.Log("Enemy has been shot!");
         }
     }
 
