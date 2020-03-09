@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 using UnityEngine.SceneManagement;
 public class GameBehavior : MonoBehaviour
@@ -12,7 +13,19 @@ public class GameBehavior : MonoBehaviour
     private int _itemsCollected = 0;
 
     public bool showLossScreen = false;
-   
+
+    public float jumpVelocity = 5f;
+    public float jumpLevel1 = 3f;
+    public float jumpLevel2 = 5f;
+    public float jumpLevel3 = 10f;
+    public TextMeshProUGUI txtJumpLevel;
+
+
+    private void Start()
+    {
+        RefreshJumpText(2);
+    }
+
     public int Items
     {
 
@@ -97,4 +110,60 @@ public class GameBehavior : MonoBehaviour
             }
         }
     }
+       
+    public void RefreshJumpText(int x)
+    {
+        switch(x)
+        {
+            case 1:
+                txtJumpLevel.text = "Jump Force: " + jumpVelocity.ToString("#.00");
+                break;
+            case 2:
+                txtJumpLevel.text = "Jump Force: " + jumpVelocity.ToString("#.00");
+                break;
+            case 3:
+                txtJumpLevel.text = "Jump Force: " + jumpVelocity.ToString("#.00");
+                break;
+            default:
+                Debug.LogError("Unsupported jump force level");
+                break;
+
+        }
+    }
+
+    public void ClickedJumpIncrease()
+    {
+        if(jumpVelocity == jumpLevel1)
+        {
+            jumpVelocity = jumpLevel2;
+            RefreshJumpText(2); 
+        }
+        else if (jumpVelocity == jumpLevel2)
+        {
+            jumpVelocity = jumpLevel3;
+            RefreshJumpText(3);
+        }
+        else
+        {
+            Debug.Log("Already at MAX jump");
+        }
+    }
+    public void ClickedJumpDecrease()
+    {
+        if (jumpVelocity == jumpLevel3)
+        {
+            jumpVelocity = jumpLevel2;
+            RefreshJumpText(2);
+        }
+        else if (jumpVelocity == jumpLevel2)
+        {
+            jumpVelocity = jumpLevel1;
+            RefreshJumpText(3);
+        }
+        else
+        {
+            Debug.Log("Already at MIN jump");
+        }
+    }
+
 }

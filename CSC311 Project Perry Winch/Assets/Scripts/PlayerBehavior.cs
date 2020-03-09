@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerBehavior : MonoBehaviour
 {
     public float moveSpeed = 10f;
     public float rotateSpeed = 90f;
-    public float jumpVelocity = 5f;
 
     public float distanceToGround = 0.1f;
 
@@ -48,10 +48,10 @@ public class PlayerBehavior : MonoBehaviour
 
         if(IsGrounded() && Input.GetKeyDown(KeyCode.Space))
         {
-            _rb.AddForce(Vector3.up * jumpVelocity, ForceMode.Impulse);
+            _rb.AddForce(Vector3.up * _gameManager.jumpVelocity, ForceMode.Impulse);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !(EventSystem.current.IsPointerOverGameObject()))
         {
             GameObject newBullet = Instantiate(bullet, this.transform.position + (this.transform.forward * 1.2f), this.transform.rotation) as GameObject;
             Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
@@ -75,16 +75,15 @@ public class PlayerBehavior : MonoBehaviour
 
     private bool IsGrounded()
     {
-        // 7
         Vector3 capsuleBottom = new
         Vector3(_col.bounds.center.x, _col.bounds.min.y,
         _col.bounds.center.z);
-        // 8
+        
         bool grounded =
         Physics.CheckCapsule(_col.bounds.center, capsuleBottom,
         distanceToGround, groundLayer,
         QueryTriggerInteraction.Ignore);
-        // 9
+       
         return grounded;
     }
 
