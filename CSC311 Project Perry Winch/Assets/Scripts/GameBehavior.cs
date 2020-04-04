@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
 using UnityEngine.SceneManagement;
 public class GameBehavior : MonoBehaviour
 {
@@ -19,11 +18,17 @@ public class GameBehavior : MonoBehaviour
     public float jumpLevel2 = 5f;
     public float jumpLevel3 = 10f;
     public TextMeshProUGUI txtJumpLevel;
+    public TextMeshProUGUI txtItems;
+    public TextMeshProUGUI txtLives;
+    public GameObject winScreen;
+    public GameObject loseScreen;
 
 
     private void Start()
     {
         RefreshJumpText(2);
+        RefreshItemsText(0);
+        RefreshLivesText(3);
     }
 
     public int Items
@@ -35,13 +40,11 @@ public class GameBehavior : MonoBehaviour
         {
             _itemsCollected = value;
             Debug.LogFormat("Items: {0}", _itemsCollected);
+            RefreshItemsText(_itemsCollected);
 
             if (_itemsCollected >= maxItems)
             {
-                labelText = "You've found all the items!";
-                showWinScreen = true;
-
-                Time.timeScale = 0f;
+                ShowWinScreen();
             }
             else
             {
@@ -61,12 +64,11 @@ public class GameBehavior : MonoBehaviour
             _playerLives = value;
             Debug.LogFormat("Lives: {0}",
             _playerLives);
+            RefreshLivesText(_playerLives);
 
             if (_playerLives <= 0)
             {
-                labelText = "You want another life with that?";
-                showLossScreen = true;
-                Time.timeScale = 0;
+                ShowLoseScreen();
             }
             else
             {
@@ -77,40 +79,23 @@ public class GameBehavior : MonoBehaviour
 
     }
 
-    void RestartLevel()
+    public void ShowLoseScreen()
+    {
+        loseScreen.SetActive(true);
+        Time.timeScale = 0;
+    }
+    public void ShowWinScreen()
+    {
+        winScreen.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void RestartLevel()
     {
         SceneManager.LoadScene(0);
         Time.timeScale = 1.0f;
     }
-
-    void OnGUI()
-    {
-        // 4
-        GUI.Box(new Rect(20, 20, 150, 25), "Player lives: " + _playerLives);
-
-        GUI.Box(new Rect(20, 50, 150, 25), "Items Collected: " + _itemsCollected);
-
-        GUI.Label(new Rect(Screen.width / 2 - 100, Screen.height - 50, 300, 50), labelText);
-
-        if (showWinScreen)
-        {
-            // 4
-            if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 50, 200, 100), "YOU WON!"))
-            {
-                RestartLevel();
-            }
-
-        }
-        if (showLossScreen)
-        {
-            if (GUI.Button(new Rect(Screen.width / 2 - 100,
-            Screen.height / 2 - 50, 200, 100), "You lose..."))
-            {
-                RestartLevel();
-            }
-        }
-    }
-       
+    
     public void RefreshJumpText(int x)
     {
         switch(x)
@@ -129,6 +114,16 @@ public class GameBehavior : MonoBehaviour
                 break;
 
         }
+    }
+
+    public void RefreshItemsText(int x)
+    {
+        txtItems.text = "Items: " + x.ToString();
+    }
+
+    public void RefreshLivesText(int x)
+    {
+        txtLives.text = "Lives: " + x.ToString();
     }
 
     public void ClickedJumpIncrease()
