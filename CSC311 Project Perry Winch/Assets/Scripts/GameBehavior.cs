@@ -31,6 +31,12 @@ public class GameBehavior : MonoBehaviour
         RefreshLivesText(3);
     }
 
+    public enum Levels
+    {
+        Level_1,
+        Level_2
+    }
+
     public int Items
     {
 
@@ -96,6 +102,11 @@ public class GameBehavior : MonoBehaviour
         Time.timeScale = 1.0f;
     }
     
+    public void LoadLevel(Levels myLevel)
+    {
+        SceneManager.LoadScene((int)myLevel);
+    }
+
     public void RefreshJumpText(int x)
     {
         switch(x)
@@ -118,12 +129,12 @@ public class GameBehavior : MonoBehaviour
 
     public void RefreshItemsText(int x)
     {
-        txtItems.text = "Items: " + x.ToString();
+        txtItems.text = "Items: " + x.ToString() + "/4";
     }
 
     public void RefreshLivesText(int x)
     {
-        txtLives.text = "Lives: " + x.ToString();
+        txtLives.text = "Lives: " + x.ToString() + "/3";
     }
 
     public void ClickedJumpIncrease()

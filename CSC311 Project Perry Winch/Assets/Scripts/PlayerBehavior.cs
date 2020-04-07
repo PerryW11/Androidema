@@ -12,19 +12,18 @@ public class PlayerBehavior : MonoBehaviour
     private float gravity = 8f;
 
     public GameObject bullet;
-    public float bulletSpeed = 100f;
+    public float bulletSpeed = 60f;
 
     private float vInput;
     private float hInput;
     private Vector3 moveDir;
 
     //private Rigidbody _rb;
-
     private CapsuleCollider _col;
     private CharacterController charCon;
     private GameBehavior _gameManager;
  
-    void Start()
+    private void Start()
     {
        // _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
@@ -32,21 +31,28 @@ public class PlayerBehavior : MonoBehaviour
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.name == "Enemy")
+        if (collision.gameObject.name == "Enemy")
         {
             _gameManager.Lives -= 1;
         }
     }
 
-    void Update()
+    private void Update()
     {
         vInput = Input.GetAxis("Vertical") * moveSpeed;
-
         hInput = Input.GetAxis("Horizontal") * rotateSpeed;
 
-        if(charCon.isGrounded)
+        DetectMovement();
+        DetectRotation();
+        DetectFire();
+        
+    }
+
+    private void DetectMovement()
+    {
+        if (charCon.isGrounded)
         {
             Debug.Log("Grounded");
             moveDir = new Vector3(0, 0, vInput);
@@ -68,14 +74,19 @@ public class PlayerBehavior : MonoBehaviour
             moveDir.y -= gravity * Time.deltaTime;
         }
         charCon.Move(moveDir * Time.deltaTime);
+    }
 
-        if(hInput != 0)
+    private void DetectRotation()
+    {
+        if (hInput != 0)
         {
             Vector3 rotation = Vector3.up * hInput;
             transform.Rotate(rotation * Time.deltaTime);
         }
-        
+    }
 
+    private void DetectFire()
+    {
         if (Input.GetMouseButtonDown(0) && !(EventSystem.current.IsPointerOverGameObject()))
         {
             GameObject newBullet = Instantiate(bullet, this.transform.position + (this.transform.forward * 1.2f), this.transform.rotation) as GameObject;
