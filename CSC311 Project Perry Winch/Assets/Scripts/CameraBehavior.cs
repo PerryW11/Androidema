@@ -16,9 +16,7 @@ public class CameraBehavior : MonoBehaviour
     void LateUpdate()
     {
         this.transform.position = target.TransformPoint(camOffset);
-     
         this.transform.LookAt(target);
-
         this.transform.position = target.TransformPoint(0.7f, 1.9f, -3.0f); //Over the shoulder perspective
     }
 }

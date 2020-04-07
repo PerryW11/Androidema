@@ -10,15 +10,12 @@ public class ItemBehavior : MonoBehaviour
     {
         gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.name == "Player")
+        if (other.gameObject.name == "Player")
         {
-            
             Destroy(this.transform.parent.gameObject);
-            
             Debug.Log("Item collected!");
-
             gameManager.Items += 1;
         }
     }
