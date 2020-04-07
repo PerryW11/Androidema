@@ -2705,7 +2705,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!1 &1529703148 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2862352505462461396, guid: d66871bdee6f70d4d86ca14d2718ef6a,
