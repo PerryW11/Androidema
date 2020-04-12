@@ -31,13 +31,6 @@ public class PlayerBehavior : MonoBehaviour
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Enemy")
-        {
-            _gameManager.Lives -= 1;
-        }
-    }
 
     private void Update()
     {
@@ -54,7 +47,7 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (charCon.isGrounded)
         {
-            Debug.Log("Grounded");
+            //Debug.Log("Grounded");
             moveDir = new Vector3(0, 0, vInput);
             moveDir = transform.TransformDirection(moveDir);
             if (Input.GetKeyDown(KeyCode.Space))
@@ -68,7 +61,7 @@ public class PlayerBehavior : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Not grounded");
+            //Debug.LogWarning("Not grounded");
             moveDir = new Vector3(0, moveDir.y, vInput);
             moveDir = transform.TransformDirection(moveDir);
             moveDir.y -= gravity * Time.deltaTime;
@@ -93,5 +86,27 @@ public class PlayerBehavior : MonoBehaviour
             Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
             bulletRB.velocity = this.transform.forward * bulletSpeed;
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(!_gameManager.playerInvincible)
+        {
+            StartCoroutine(TempInvincibility());
+        }
+    }
+
+    IEnumerator TempInvincibility()
+    {
+        _gameManager.playerInvincible = true;
+        MeshRenderer mr = GetComponent<MeshRenderer>();
+        float timeStart = Time.time;
+        while(Time.time - timeStart < 2)
+        {
+            mr.enabled = !mr.enabled;
+            yield return new WaitForSeconds(0.2f);
+        }
+        mr.enabled = true;
+        _gameManager.playerInvincible = false;
     }
 }

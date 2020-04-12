@@ -22,6 +22,7 @@ public class GameBehavior : MonoBehaviour
     public TextMeshProUGUI txtLives;
     public GameObject winScreen;
     public GameObject loseScreen;
+    public bool playerInvincible = false;
 
 
     private void Start()
