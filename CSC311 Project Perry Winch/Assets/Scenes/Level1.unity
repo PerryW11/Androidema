@@ -422,6 +422,7 @@ MonoBehaviour:
   txtLives: {fileID: 1559205291}
   winScreen: {fileID: 1877647253}
   loseScreen: {fileID: 1688269835}
+  playerInvincible: 0
 --- !u!4 &98733936
 Transform:
   m_ObjectHideFlags: 0
@@ -3624,6 +3625,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1161065657, guid: 72c5367042f79054bacdea7e9a0fc6e1, type: 3}
       propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 98733935}
+    - target: {fileID: 1161065657, guid: 72c5367042f79054bacdea7e9a0fc6e1, type: 3}
+      propertyPath: _gameManager
       value: 
       objectReference: {fileID: 98733935}
     - target: {fileID: 399877685562560510, guid: 72c5367042f79054bacdea7e9a0fc6e1,

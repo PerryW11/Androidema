@@ -11,6 +11,8 @@ public class EnemyBehavior : MonoBehaviour
 
     private int locationIndex = 0;
 
+    private GameBehavior _gameManager;
+
     public Transform player;
 
     private NavMeshAgent agent;
@@ -32,6 +34,7 @@ public class EnemyBehavior : MonoBehaviour
 
     void Start()
     {
+        _gameManager = GameObject.FindObjectOfType<GameBehavior>();
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player").transform;
         InitializePatrolRoute();
@@ -61,13 +64,18 @@ public class EnemyBehavior : MonoBehaviour
         locationIndex = (locationIndex + 1) % locations.Count;
     }
 
-
-    void OnTriggerEnter(Collider other)
+    public void HandlePlayerSight()
     {
-        if (other.name == "Player")
+        agent.destination = player.position;
+        Debug.Log("Player detected - attack!");
+    }
+
+    public void HandlePlayerContact()
+    {
+        if(!_gameManager.playerInvincible)
         {
-            agent.destination = player.position;
-            Debug.Log("Player detected - attack!");
+            _gameManager.Lives -= 1;
+            MoveToNextPatrolLocation();
         }
     }
 
