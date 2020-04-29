@@ -3,40 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEditor;
+
 public class GameBehavior : MonoBehaviour
 {
-    public string labelText = "Collect all 4 items and win your freedom!";
     public int maxItems = 4;
-
-    public bool showWinScreen = false;
     private int _itemsCollected = 0;
 
-    public bool showLossScreen = false;
+    [System.NonSerialized] public bool showWinScreen = false;
+    [System.NonSerialized] public bool showLossScreen = false;
 
     public float jumpVelocity = 5f;
-    public float jumpLevel1 = 3f;
-    public float jumpLevel2 = 5f;
-    public float jumpLevel3 = 10f;
+    private float jumpLevel1 = 3f;
+    private float jumpLevel2 = 5f;
+    private float jumpLevel3 = 10f;
+    private float myTimer;
+
     public TextMeshProUGUI txtJumpLevel;
     public TextMeshProUGUI txtItems;
     public TextMeshProUGUI txtLives;
+    public TextMeshProUGUI txtLevel;
+    public TextMeshProUGUI txtTime;
+
     public GameObject winScreen;
     public GameObject loseScreen;
+    public GameObject levelPad;
+    public GameObject escMenu;
+    public GameObject teleporterTip;
+
+    public AudioSource audItemPickup;
+    public AudioSource audNextLevelAvailable;
+    public AudioSource audEnemyKilled;
+    public AudioSource audPlayerKilled;
+
+
+    public PlayerBehavior scrPlayer;
     public bool playerInvincible = false;
-
-
-    private void Start()
-    {
-        RefreshJumpText(2);
-        RefreshItemsText(0);
-        RefreshLivesText(3);
-    }
-
-    public enum Levels
-    {
-        Level_1,
-        Level_2
-    }
+    public bool initialized = false;
 
     public int Items
     {
@@ -48,50 +51,150 @@ public class GameBehavior : MonoBehaviour
             _itemsCollected = value;
             Debug.LogFormat("Items: {0}", _itemsCollected);
             RefreshItemsText(_itemsCollected);
+            PlayerPrefs.SetInt("ItemsCollected", value);
 
-            if (_itemsCollected >= maxItems)
+            if (_itemsCollected >= MaxItemsAdjusted)
             {
-                ShowWinScreen();
+                if (SceneManager.GetActiveScene().buildIndex == 0)
+                {
+                    audNextLevelAvailable.Play();
+                    ShowLevelPad();
+                    teleporterTip.SetActive(true);
+                }
+                if (SceneManager.GetActiveScene().buildIndex == 1)
+                {
+                    ShowWinScreen();
+                }
             }
             else
             {
-                labelText = "Item found, only " + (maxItems -
-                _itemsCollected) + " more to go!";
+                if(_itemsCollected != 0)
+                {
+                    if (initialized)
+                    {
+                        audItemPickup.Play();
+                    }
+                }
             }
 
         }
     }
-    private int _playerLives = 3;
 
+    private int _playerLives = 3;
     public int Lives
     {
         get { return _playerLives; }
         set
         {
+
+            if (value < _playerLives)
+            {
+                if (initialized)
+                {
+                    scrPlayer.CallTempInvincibility();
+                }
+            }
             _playerLives = value;
-            Debug.LogFormat("Lives: {0}",
-            _playerLives);
+            PlayerPrefs.SetInt("PlayerLives", _playerLives);
+            Debug.LogFormat("Lives: {0}", _playerLives);
             RefreshLivesText(_playerLives);
 
             if (_playerLives <= 0)
             {
+                audPlayerKilled.Play();
                 ShowLoseScreen();
-            }
-            else
-            {
-                labelText = "Ouch... that's got hurt.";
             }
         }
 
 
     }
 
-    public void ShowLoseScreen()
+    public int MaxItemsAdjusted
+    {
+        get
+        {
+            int ret = maxItems;
+            if (SceneManager.GetActiveScene().buildIndex == 1)
+            {
+                ret *= 2;
+            }
+            return ret;
+        }
+    }
+
+
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            Items = 0;
+            Lives = 3;
+        }
+        else
+        {
+            
+            if (PlayerPrefs.HasKey("ItemsCollected"))
+            {
+                Items = PlayerPrefs.GetInt("ItemsCollected");
+            }
+            if (PlayerPrefs.HasKey("PlayerLives"))
+            {
+                Lives = PlayerPrefs.GetInt("PlayerLives");
+            }
+            if(PlayerPrefs.HasKey("TimeCompleted"))
+            {
+                myTimer = PlayerPrefs.GetFloat("TimeCompleted");
+            }
+        }
+        RefreshJumpText(2);
+        RefreshItemsText(Items);
+        RefreshLivesText(Lives);
+        RefreshLevelText(SceneManager.GetActiveScene().buildIndex + 1);
+        initialized = true;
+    }
+
+    private void Update()
+    {
+        if(!winScreen.activeInHierarchy || !loseScreen.activeInHierarchy || escMenu.activeInHierarchy)
+        {
+            myTimer += Time.deltaTime;
+            RefreshTimeText(myTimer);
+            PlayerPrefs.SetFloat("TimeCompleted", myTimer);
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (escMenu.activeInHierarchy)
+            {
+                escMenu.SetActive(false);
+            }
+            else
+            {
+                ShowEscMenu();
+            }
+        }
+    }
+
+    public enum Levels
+    {
+        Level_1,
+        Level_2
+    }
+
+    public void EnemyKilled()
+    {
+        audEnemyKilled.Play();
+    }
+
+    private void ShowLevelPad()
+    {
+        levelPad.SetActive(true);
+    }
+    private void ShowLoseScreen()
     {
         loseScreen.SetActive(true);
         Time.timeScale = 0;
     }
-    public void ShowWinScreen()
+    private void ShowWinScreen()
     {
         winScreen.SetActive(true);
         Time.timeScale = 0;
@@ -101,6 +204,22 @@ public class GameBehavior : MonoBehaviour
     {
         SceneManager.LoadScene(0);
         Time.timeScale = 1.0f;
+    }
+
+    private void ShowEscMenu()
+    {
+        escMenu.SetActive(true);
+    }
+
+    public void QuitGame()
+    {
+       #if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+       #else
+        {
+            Application.Quit();
+        }
+       #endif
     }
     
     public void LoadLevel(Levels myLevel)
@@ -128,14 +247,24 @@ public class GameBehavior : MonoBehaviour
         }
     }
 
-    public void RefreshItemsText(int x)
+    private void RefreshItemsText(int x)
     {
-        txtItems.text = "Items: " + x.ToString() + "/4";
+        txtItems.text = "Items: " + x.ToString() + "/" + MaxItemsAdjusted.ToString();
     }
 
-    public void RefreshLivesText(int x)
+    private void RefreshLivesText(int x)
     {
         txtLives.text = "Lives: " + x.ToString() + "/3";
+    }
+
+    private void RefreshLevelText(int x)
+    {
+        txtLevel.text = "Level " + x.ToString();
+    }
+
+    private void RefreshTimeText(float x)
+    {
+        txtTime.text = "Time: " + x.ToString("#.000");
     }
 
     public void ClickedJumpIncrease()

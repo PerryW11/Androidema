@@ -17,18 +17,23 @@ public class PlayerBehavior : MonoBehaviour
     private float vInput;
     private float hInput;
     private Vector3 moveDir;
+    public float timeInvincible = 2f;
+
+    public Animator charAnim;
+
+    public AudioSource audWeaponFire;
 
     //private Rigidbody _rb;
     private CapsuleCollider _col;
     private CharacterController charCon;
-    private GameBehavior _gameManager;
+    public GameBehavior _gameManager;
  
     private void Start()
     {
        // _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
         charCon = GetComponent<CharacterController>();
-        _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
+       // _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
 
 
@@ -45,6 +50,10 @@ public class PlayerBehavior : MonoBehaviour
 
     private void DetectMovement()
     {
+
+        charAnim.SetBool("IsRunning", vInput != 0);
+        charAnim.SetBool("IsJumping", Input.GetKeyDown(KeyCode.Space) && charCon.isGrounded);
+
         if (charCon.isGrounded)
         {
             //Debug.Log("Grounded");
@@ -80,8 +89,9 @@ public class PlayerBehavior : MonoBehaviour
 
     private void DetectFire()
     {
-        if (Input.GetMouseButtonDown(0) && !(EventSystem.current.IsPointerOverGameObject()))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
+            audWeaponFire.Play();
             GameObject newBullet = Instantiate(bullet, this.transform.position + (this.transform.forward * 1.2f), this.transform.rotation) as GameObject;
             Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
             bulletRB.velocity = this.transform.forward * bulletSpeed;
@@ -96,17 +106,24 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
+    public void CallTempInvincibility()
+    {
+        StartCoroutine(TempInvincibility());
+    }
+
     IEnumerator TempInvincibility()
     {
         _gameManager.playerInvincible = true;
         MeshRenderer mr = GetComponent<MeshRenderer>();
         float timeStart = Time.time;
-        while(Time.time - timeStart < 2)
+        while(Time.time - timeStart < timeInvincible)
         {
             mr.enabled = !mr.enabled;
             yield return new WaitForSeconds(0.2f);
+            mr.enabled = !mr.enabled;
+            yield return new WaitForSeconds(0.08f);
         }
-        mr.enabled = true;
+        mr.enabled = false;
         _gameManager.playerInvincible = false;
     }
 }
