@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class BulletBehavior : MonoBehaviour
 {
-    public float onscreenDelay = 3f; 
-    void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        Destroy(this.gameObject, onscreenDelay);
+        Destroy(gameObject);
     }
 }

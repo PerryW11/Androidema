@@ -20,12 +20,15 @@ public class EnemyBehavior : MonoBehaviour
     private int _lives = 3;
     public int EnemyLives
     {
+        
         get { return _lives; }
+
         private set
         {
             _lives = value;
             if (_lives <= 0)
             {
+                _gameManager.EnemyKilled();
                 Destroy(this.gameObject);
                 Debug.Log("Enemy down.");
             }
