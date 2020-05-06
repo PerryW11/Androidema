@@ -24,6 +24,7 @@ public class GameBehavior : MonoBehaviour
     public TextMeshProUGUI txtLives;
     public TextMeshProUGUI txtLevel;
     public TextMeshProUGUI txtTime;
+    public TextMeshProUGUI txtHighScore;
 
     public GameObject winScreen;
     public GameObject loseScreen;
@@ -31,6 +32,7 @@ public class GameBehavior : MonoBehaviour
     public GameObject escMenu;
     public GameObject teleporterTip;
 
+    public float pickupPitchMod = 0f; 
     public AudioSource audItemPickup;
     public AudioSource audNextLevelAvailable;
     public AudioSource audEnemyKilled;
@@ -41,7 +43,7 @@ public class GameBehavior : MonoBehaviour
     public bool playerInvincible = false;
     public bool initialized = false;
 
-    public int Items
+    public int Items // To handle the items collected
     {
 
         get { return _itemsCollected; }
@@ -50,18 +52,18 @@ public class GameBehavior : MonoBehaviour
         {
             _itemsCollected = value;
             Debug.LogFormat("Items: {0}", _itemsCollected);
-            RefreshItemsText(_itemsCollected);
+            RefreshItemsText(_itemsCollected); 
             PlayerPrefs.SetInt("ItemsCollected", value);
 
-            if (_itemsCollected >= MaxItemsAdjusted)
+            if (_itemsCollected >= MaxItemsAdjusted) // If the items collected is greater than or equal to the max items for that specific level
             {
-                if (SceneManager.GetActiveScene().buildIndex == 0)
+                if (SceneManager.GetActiveScene().buildIndex == 0) // If it's level 1
                 {
                     audNextLevelAvailable.Play();
                     ShowLevelPad();
                     teleporterTip.SetActive(true);
                 }
-                if (SceneManager.GetActiveScene().buildIndex == 1)
+                if (SceneManager.GetActiveScene().buildIndex == 1) // If it's level 2
                 {
                     ShowWinScreen();
                 }
@@ -72,7 +74,9 @@ public class GameBehavior : MonoBehaviour
                 {
                     if (initialized)
                     {
+                        audItemPickup.pitch = 0.9f + pickupPitchMod; // Will change pitch of audItemPickup as more items are picked up
                         audItemPickup.Play();
+                        pickupPitchMod += 0.15f;
                     }
                 }
             }
@@ -91,11 +95,11 @@ public class GameBehavior : MonoBehaviour
             {
                 if (initialized)
                 {
-                    scrPlayer.CallTempInvincibility();
+                    scrPlayer.CallTempInvincibility(); // Temporary invincibility
                 }
             }
             _playerLives = value;
-            PlayerPrefs.SetInt("PlayerLives", _playerLives);
+            PlayerPrefs.SetInt("PlayerLives", _playerLives); 
             Debug.LogFormat("Lives: {0}", _playerLives);
             RefreshLivesText(_playerLives);
 
@@ -114,9 +118,9 @@ public class GameBehavior : MonoBehaviour
         get
         {
             int ret = maxItems;
-            if (SceneManager.GetActiveScene().buildIndex == 1)
+            if (SceneManager.GetActiveScene().buildIndex == 1) // If it's level 2
             {
-                ret *= 2;
+                ret *= 2; // Double the items required to win
             }
             return ret;
         }
@@ -125,14 +129,14 @@ public class GameBehavior : MonoBehaviour
 
     private void Start()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (SceneManager.GetActiveScene().buildIndex == 0) // If it's level 1
         {
             Items = 0;
             Lives = 3;
         }
         else
         {
-            
+            // Checking for data to carry over in level
             if (PlayerPrefs.HasKey("ItemsCollected"))
             {
                 Items = PlayerPrefs.GetInt("ItemsCollected");
@@ -150,16 +154,17 @@ public class GameBehavior : MonoBehaviour
         RefreshItemsText(Items);
         RefreshLivesText(Lives);
         RefreshLevelText(SceneManager.GetActiveScene().buildIndex + 1);
-        initialized = true;
+        initialized = true; // Scene is fully initialized and setup
     }
 
     private void Update()
     {
-        if(!winScreen.activeInHierarchy || !loseScreen.activeInHierarchy || escMenu.activeInHierarchy)
+        if(!winScreen.activeInHierarchy || !loseScreen.activeInHierarchy || !escMenu.activeInHierarchy)
         {
             myTimer += Time.deltaTime;
             RefreshTimeText(myTimer);
             PlayerPrefs.SetFloat("TimeCompleted", myTimer);
+            RefreshHighScoreText(myTimer);
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -265,6 +270,17 @@ public class GameBehavior : MonoBehaviour
     private void RefreshTimeText(float x)
     {
         txtTime.text = "Time: " + x.ToString("#.000");
+    }
+
+    private void RefreshHighScoreText(float x)
+    {
+        txtHighScore.text = "High Score: " + x.ToString("#.000");
+    }
+
+    public void ClearHighScore()
+    {
+        PlayerPrefs.SetFloat("TimeCompleted", 0f);
+        RefreshHighScoreText(PlayerPrefs.GetFloat("TimeCompleted"));
     }
 
     public void ClickedJumpIncrease()
