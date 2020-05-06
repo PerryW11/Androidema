@@ -17,14 +17,13 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Settings
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
+    - TMPro.TextMeshPro
     - TMPro.TextMeshProUGUI
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -122,6 +121,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 12620}
     - Class: 114
       Script: {instanceID: 12766}
+    - Class: 114
+      Script: {instanceID: 12864}
     - Class: 114
       Script: {instanceID: 12966}
     - Class: 114
@@ -235,6 +236,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 12558}
     - Class: 114
       Script: {instanceID: 12620}
+    - Class: 114
+      Script: {instanceID: 12864}
     - Class: 114
       Script: {instanceID: 12966}
     - Class: 114
@@ -596,7 +599,7 @@ ScriptsOnlyBuild:
     className: Physics2DRaycaster
   - hash:
       serializedVersion: 2
-      Hash: ed439ac8293e423a83c8bcbe33196d26
+      Hash: 573b0b192dc0e9ebf1c8e96c5915daf1
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameBehavior
@@ -704,7 +707,7 @@ ScriptsOnlyBuild:
     className: Dropdown
   - hash:
       serializedVersion: 2
-      Hash: 7a5c8245439d3f2e129b7c854079137b
+      Hash: 2b6645380ef1193aa370d02735e5d504
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: EnemyBehavior
@@ -754,4 +757,5 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/Level1.unity
   - Assets/Scenes/Level2.unity
-  playerPath: C:/Users/Mindl/Desktop/Builds/Build 4/CSC311 Project Perry Winch.exe
+  playerPath: C:/Users/Mindl/Desktop/Builds/HW 5-5-2020 CSC311 Perry Winch/CSC311
+    Project Perry Winch.exe

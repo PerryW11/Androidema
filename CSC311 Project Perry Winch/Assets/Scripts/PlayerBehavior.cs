@@ -95,6 +95,18 @@ public class PlayerBehavior : MonoBehaviour
             GameObject newBullet = Instantiate(bullet, this.transform.position + (this.transform.forward * 1.2f), this.transform.rotation) as GameObject;
             Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
             bulletRB.velocity = this.transform.forward * bulletSpeed;
+
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, 100);
+            int i = 0;
+            while(i < hitColliders.Length)
+            {
+                Collider col = hitColliders[i];
+                if(col.gameObject.tag == "Enemy")
+                {
+                    col.GetComponent<EnemyBehavior>().HandlePlayerSight();
+                }
+                i++;
+            }
         }
     }
 

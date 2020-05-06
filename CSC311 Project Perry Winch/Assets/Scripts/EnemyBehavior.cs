@@ -13,11 +13,24 @@ public class EnemyBehavior : MonoBehaviour
 
     private GameBehavior _gameManager;
 
+    public Animator charAnim;
+
     public Transform player;
 
     private NavMeshAgent agent;
 
+    public GameObject gobExclamation;
+
     private int _lives = 3;
+
+    private bool damagedPlayer = false;
+    public bool DamagedPlayer
+    {
+        get
+        {
+            return damagedPlayer;
+        }
+    }
     public int EnemyLives
     {
         
@@ -37,7 +50,7 @@ public class EnemyBehavior : MonoBehaviour
 
     void Start()
     {
-        _gameManager = GameObject.FindObjectOfType<GameBehavior>();
+        _gameManager = FindObjectOfType<GameBehavior>();
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player").transform;
         InitializePatrolRoute();
@@ -63,18 +76,23 @@ public class EnemyBehavior : MonoBehaviour
         if (locations.Count == 0)
             return;
 
+        
         agent.destination = locations[locationIndex].position;
         locationIndex = (locationIndex + 1) % locations.Count;
+        charAnim.SetBool("IsWalking", true);
+        gobExclamation.SetActive(false);
     }
 
     public void HandlePlayerSight()
     {
+        gobExclamation.SetActive(true);
         agent.destination = player.position;
         Debug.Log("Player detected - attack!");
     }
 
     public void HandlePlayerContact()
     {
+        damagedPlayer = true;
         if(!_gameManager.playerInvincible)
         {
             _gameManager.Lives -= 1;
@@ -82,11 +100,14 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
+  
+
     void OnTriggerExit(Collider other)
     { 
         if (other.name == "Player")
         {
             Debug.Log("Player out of range, resume patrol");
+            damagedPlayer = false;
         }
     }
     void OnCollisionEnter(Collision collision)

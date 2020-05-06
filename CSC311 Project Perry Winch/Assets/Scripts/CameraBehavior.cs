@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class CameraBehavior : MonoBehaviour
 {
-    public Vector3 camOffset = new Vector3(0, 1.5f, -3.2f);
+    public Vector3 camOffset = new Vector3(0, 0, 0);
 
     private Transform target;
 
+    private Transform target2;
+
     void Start()
     {
-        target = GameObject.Find("Player").transform;
+        //target = GameObject.Find("Player").transform;
+        target = GameObject.Find("CameraLocation").transform;
+        target2 = GameObject.Find("CameraLookLocation").transform;
     }
 
     void LateUpdate()
     {
-        this.transform.position = target.TransformPoint(camOffset);
-        this.transform.LookAt(target);
-        this.transform.position = target.TransformPoint(0.7f, 1.9f, -3.0f); //Over the shoulder perspective
+        this.transform.position = target.position;
+        this.transform.LookAt(target2);
     }
 }
