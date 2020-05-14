@@ -1,9 +1,13 @@
-# NightfallSkirmish
+# Androidema 
 
-Nightfall Skirmish is a 3rd person shooter revolving around combat.
+You have been programmed to serve your people. Your specialty is combat and destruction.
 
-Use stealth to your advantage to collect all the items.
+Your creators want the one thing that keeps this vast galaxy thriving, and that is rodon.
 
-If stealth isn't your strong suit, you'll have to shoot your way out.
+Rodon is a precious resource that brings longevity and life, inciting new behaviors to the DNA (or circuitry) of a being.
 
-Work in progress with the Unity engine.
+This incites a burst of evolutionary traits. Without it, your kind is considered of lesser stature.
+
+Rodon is needed, as life on your planet shall slowly decend into a whirlpool of chaos and greed in its absence.
+
+Do what is necessary to ensure the extraction of this precious material. For your people.
