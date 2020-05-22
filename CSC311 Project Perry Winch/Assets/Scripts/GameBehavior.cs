@@ -43,6 +43,13 @@ public class GameBehavior : MonoBehaviour
     public bool playerInvincible = false;
     public bool initialized = false;
 
+    private bool gamePaused = false;
+
+    public bool GamePaused
+    {
+        get { return gamePaused; }
+    }
+
     public int Items // To handle the items collected
     {
 
