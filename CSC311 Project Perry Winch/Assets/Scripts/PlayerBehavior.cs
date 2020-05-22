@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class PlayerBehavior : MonoBehaviour
 {
     public float moveSpeed = 10f;
-    public float rotateSpeed = 90f;
+    public float rotateSpeed = 150f;
     public float distanceToGround = 0.1f;
     public LayerMask groundLayer;
     private float gravity = 8f;
@@ -17,8 +17,9 @@ public class PlayerBehavior : MonoBehaviour
     private float vInput;
     private float hInput;
     private Vector3 moveDir;
-    public float timeInvincible = 2f;
+    private Quaternion targetRotation;
 
+    public float timeInvincible = 2f;
     public Animator charAnim;
 
     public AudioSource audWeaponFire;
@@ -27,12 +28,23 @@ public class PlayerBehavior : MonoBehaviour
     private CapsuleCollider _col;
     private CharacterController charCon;
     public GameBehavior _gameManager;
- 
+
+    public Quaternion TargetRotation
+    {
+        get { return targetRotation; }
+    }
+
+    public CharacterController CharacterControl
+    {
+        get { return charCon; }
+    }
+
     private void Start()
     {
        // _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
         charCon = GetComponent<CharacterController>();
+        targetRotation = transform.rotation;
        // _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
 
@@ -41,6 +53,8 @@ public class PlayerBehavior : MonoBehaviour
     {
         vInput = Input.GetAxis("Vertical") * moveSpeed;
         hInput = Input.GetAxis("Horizontal") * rotateSpeed;
+        targetRotation *= Quaternion.AngleAxis(hInput * Time.deltaTime, Vector3.up);
+        transform.rotation = targetRotation;
 
         DetectMovement();
         DetectRotation();
@@ -56,7 +70,6 @@ public class PlayerBehavior : MonoBehaviour
 
         if (charCon.isGrounded)
         {
-            //Debug.Log("Grounded");
             moveDir = new Vector3(0, 0, vInput);
             moveDir = transform.TransformDirection(moveDir);
             if (Input.GetKeyDown(KeyCode.Space))
