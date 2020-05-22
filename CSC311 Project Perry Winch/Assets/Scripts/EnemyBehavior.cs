@@ -11,7 +11,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private int locationIndex = 0;
 
-    private GameBehavior _gameManager;
+    private GameBehavior gameManager;
 
     public Animator charAnim;
 
@@ -41,7 +41,7 @@ public class EnemyBehavior : MonoBehaviour
             _lives = value;
             if (_lives <= 0)
             {
-                _gameManager.EnemyKilled();
+                gameManager.EnemyKilled();
                 Destroy(this.gameObject);
                 Debug.Log("Enemy down.");
             }
@@ -50,7 +50,7 @@ public class EnemyBehavior : MonoBehaviour
 
     void Start()
     {
-        _gameManager = FindObjectOfType<GameBehavior>();
+        gameManager = FindObjectOfType<GameBehavior>();
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player").transform;
         InitializePatrolRoute();
@@ -93,9 +93,9 @@ public class EnemyBehavior : MonoBehaviour
     public void HandlePlayerContact()
     {
         damagedPlayer = true;
-        if(!_gameManager.playerInvincible)
+        if(!gameManager.playerInvincible)
         {
-            _gameManager.Lives -= 1;
+            gameManager.Lives -= 1;
             MoveToNextPatrolLocation();
         }
     }

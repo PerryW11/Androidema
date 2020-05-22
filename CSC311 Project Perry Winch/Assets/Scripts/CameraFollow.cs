@@ -7,7 +7,7 @@ public class CameraFollow : MonoBehaviour
     public float CameraMoveSpeed = 120f;
     public GameObject CameraFollowObj;
     public float clampAngle = 80f;
-    public float inputSensitivity = 150f;
+    public float inputSensitivity = 350f;
     public GameObject CameraObj;
     public GameObject PlayerObj;
     public float camDistanceXToPlayer;

@@ -25,9 +25,11 @@ public class PlayerBehavior : MonoBehaviour
     public AudioSource audWeaponFire;
 
     //private Rigidbody _rb;
-    private CapsuleCollider _col;
+    private CapsuleCollider col;
     private CharacterController charCon;
-    public GameBehavior _gameManager;
+    public GameBehavior gameManager;
+    public CameraFollow cam;
+
 
     public Quaternion TargetRotation
     {
@@ -42,39 +44,47 @@ public class PlayerBehavior : MonoBehaviour
     private void Start()
     {
        // _rb = GetComponent<Rigidbody>();
-        _col = GetComponent<CapsuleCollider>();
+        col = GetComponent<CapsuleCollider>();
         charCon = GetComponent<CharacterController>();
         targetRotation = transform.rotation;
-       // _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
+        gameManager = FindObjectOfType<GameBehavior>();
+       // gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
 
 
     private void Update()
     {
         vInput = Input.GetAxis("Vertical") * moveSpeed;
-        hInput = Input.GetAxis("Horizontal") * rotateSpeed;
-        targetRotation *= Quaternion.AngleAxis(hInput * Time.deltaTime, Vector3.up);
-        transform.rotation = targetRotation;
+        hInput = Input.GetAxis("Horizontal") * moveSpeed;
+        //targetRotation *= Quaternion.AngleAxis(hInput * Time.deltaTime, Vector3.up);
+        
+        if(Input.GetMouseButton(1) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        {
+            Vector3 eulerRotation = new Vector3(transform.eulerAngles.x, cam.transform.eulerAngles.y, transform.eulerAngles.z);
+            transform.rotation = Quaternion.Euler(eulerRotation);
+        }
 
         DetectMovement();
-        DetectRotation();
+       // DetectRotation();
         DetectFire();
         
     }
 
+    
+
     private void DetectMovement()
     {
 
-        charAnim.SetBool("IsRunning", vInput != 0);
-        charAnim.SetBool("IsJumping", Input.GetKeyDown(KeyCode.Space) && charCon.isGrounded);
+        //charAnim.SetBool("IsRunning", vInput != 0);
+        //charAnim.SetBool("IsJumping", Input.GetKeyDown(KeyCode.Space) && charCon.isGrounded);
 
         if (charCon.isGrounded)
         {
-            moveDir = new Vector3(0, 0, vInput);
+            moveDir = new Vector3(hInput, 0, vInput);
             moveDir = transform.TransformDirection(moveDir);
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                moveDir.y = _gameManager.jumpVelocity;
+                moveDir.y = gameManager.jumpVelocity;
             }
             else
             {
@@ -83,22 +93,21 @@ public class PlayerBehavior : MonoBehaviour
         }
         else
         {
-            //Debug.LogWarning("Not grounded");
-            moveDir = new Vector3(0, moveDir.y, vInput);
+            moveDir = new Vector3(hInput, moveDir.y, vInput);
             moveDir = transform.TransformDirection(moveDir);
             moveDir.y -= gravity * Time.deltaTime;
         }
         charCon.Move(moveDir * Time.deltaTime);
     }
 
-    private void DetectRotation()
+   /* private void DetectRotation()
     {
         if (hInput != 0)
         {
             Vector3 rotation = Vector3.up * hInput;
             transform.Rotate(rotation * Time.deltaTime);
         }
-    }
+    }*/
 
     private void DetectFire()
     {
@@ -125,7 +134,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(!_gameManager.playerInvincible)
+        if(!gameManager.playerInvincible)
         {
             StartCoroutine(TempInvincibility());
         }
@@ -138,7 +147,7 @@ public class PlayerBehavior : MonoBehaviour
 
     IEnumerator TempInvincibility()
     {
-        _gameManager.playerInvincible = true;
+        gameManager.playerInvincible = true;
         MeshRenderer mr = GetComponent<MeshRenderer>();
         float timeStart = Time.time;
         while(Time.time - timeStart < timeInvincible)
@@ -149,6 +158,6 @@ public class PlayerBehavior : MonoBehaviour
             yield return new WaitForSeconds(0.08f);
         }
         mr.enabled = false;
-        _gameManager.playerInvincible = false;
+        gameManager.playerInvincible = false;
     }
 }
