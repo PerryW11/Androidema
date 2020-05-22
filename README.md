@@ -1,4 +1,4 @@
-# Androidema 
+# Androidema (Work in progress)
 
 You have been programmed to serve your people. Your specialty is combat and destruction.
 
