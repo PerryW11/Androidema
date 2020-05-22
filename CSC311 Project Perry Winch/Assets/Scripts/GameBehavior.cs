@@ -8,7 +8,7 @@ using UnityEditor;
 public class GameBehavior : MonoBehaviour
 {
     public int maxItems = 4;
-    private int _itemsCollected = 0;
+    private int itemsCollected = 0;
 
     [System.NonSerialized] public bool showWinScreen = false;
     [System.NonSerialized] public bool showLossScreen = false;
@@ -53,16 +53,16 @@ public class GameBehavior : MonoBehaviour
     public int Items // To handle the items collected
     {
 
-        get { return _itemsCollected; }
+        get { return itemsCollected; }
 
         set
         {
-            _itemsCollected = value;
-            Debug.LogFormat("Items: {0}", _itemsCollected);
-            RefreshItemsText(_itemsCollected); 
+            itemsCollected = value;
+            Debug.LogFormat("Items: {0}", itemsCollected);
+            RefreshItemsText(itemsCollected); 
             PlayerPrefs.SetInt("ItemsCollected", value);
 
-            if (_itemsCollected >= MaxItemsAdjusted) // If the items collected is greater than or equal to the max items for that specific level
+            if (itemsCollected >= MaxItemsAdjusted) // If the items collected is greater than or equal to the max items for that specific level
             {
                 if (SceneManager.GetActiveScene().buildIndex == 0) // If it's level 1
                 {
@@ -77,7 +77,7 @@ public class GameBehavior : MonoBehaviour
             }
             else
             {
-                if(_itemsCollected != 0)
+                if(itemsCollected != 0)
                 {
                     if (initialized)
                     {
@@ -91,26 +91,26 @@ public class GameBehavior : MonoBehaviour
         }
     }
 
-    private int _playerLives = 3;
+    private int playerLives = 3;
     public int Lives
     {
-        get { return _playerLives; }
+        get { return playerLives; }
         set
         {
 
-            if (value < _playerLives)
+            if (value < playerLives)
             {
                 if (initialized)
                 {
                     scrPlayer.CallTempInvincibility(); // Temporary invincibility
                 }
             }
-            _playerLives = value;
-            PlayerPrefs.SetInt("PlayerLives", _playerLives); 
-            Debug.LogFormat("Lives: {0}", _playerLives);
-            RefreshLivesText(_playerLives);
+            playerLives = value;
+            PlayerPrefs.SetInt("PlayerLives", playerLives); 
+            Debug.LogFormat("Lives: {0}", playerLives);
+            RefreshLivesText(playerLives);
 
-            if (_playerLives <= 0)
+            if (playerLives <= 0)
             {
                 audPlayerKilled.Play();
                 ShowLoseScreen();
