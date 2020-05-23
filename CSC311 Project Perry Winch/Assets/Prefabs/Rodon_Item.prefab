@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7325308936191094911}
   - component: {fileID: 5392101220258313825}
   m_Layer: 0
-  m_Name: Pickup_item
+  m_Name: Rodon_Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4898,7 +4898,7 @@ PrefabInstance:
     - target: {fileID: 4835454728808931569, guid: 5996bd63faee035428cb098b964e0f8d,
         type: 3}
       propertyPath: m_Name
-      value: Health_Pickup
+      value: Rodon_Pickup
       objectReference: {fileID: 0}
     - target: {fileID: 5545914575471499628, guid: 5996bd63faee035428cb098b964e0f8d,
         type: 3}

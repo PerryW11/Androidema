@@ -29,6 +29,7 @@ public class GameBehavior : MonoBehaviour
     public GameObject winScreen;
     public GameObject loseScreen;
     public GameObject levelPad;
+    public GameObject levelPadDoor;
     public GameObject escMenu;
     public GameObject teleporterTip;
 
@@ -200,6 +201,7 @@ public class GameBehavior : MonoBehaviour
     private void ShowLevelPad()
     {
         levelPad.SetActive(true);
+        levelPadDoor.SetActive(false);
     }
     private void ShowLoseScreen()
     {

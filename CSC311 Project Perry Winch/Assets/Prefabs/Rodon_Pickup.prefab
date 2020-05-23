@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1948335591295625334}
   - component: {fileID: 1657081272}
   m_Layer: 0
-  m_Name: Health_Pickup
+  m_Name: Rodon_Pickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a24a23db9eb10dc45b4b00fc0eaf92e7, type: 2}
+  - {fileID: 2100000, guid: 3f68c65519a45fd4eaf57fb45dcd363a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -94,6 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65554e2ddf9703469c9c27168a07b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
 --- !u!136 &1948335591295625334
 CapsuleCollider:
   m_ObjectHideFlags: 0
