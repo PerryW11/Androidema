@@ -61,7 +61,8 @@ public class PlayerBehavior : MonoBehaviour
         if(Input.GetMouseButton(1) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
         {
             Vector3 eulerRotation = new Vector3(transform.eulerAngles.x, cam.transform.eulerAngles.y, transform.eulerAngles.z);
-            transform.rotation = Quaternion.Euler(eulerRotation);
+            //transform.rotation = Quaternion.Euler(eulerRotation);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(eulerRotation), Time.deltaTime * 8f);
         }
 
         DetectMovement();
@@ -75,8 +76,17 @@ public class PlayerBehavior : MonoBehaviour
     private void DetectMovement()
     {
 
-        //charAnim.SetBool("IsRunning", vInput != 0);
-        //charAnim.SetBool("IsJumping", Input.GetKeyDown(KeyCode.Space) && charCon.isGrounded);
+        //Animations for player movement
+        charAnim.SetBool("IsWalkingForward", Mathf.Sign(vInput) == Mathf.Sign(1) && vInput != 0);
+        charAnim.SetBool("IsWalkingForwardLeft", Mathf.Sign(vInput) == Mathf.Sign(1) && Mathf.Sign(hInput) == Mathf.Sign(-1) && vInput != 0);
+        charAnim.SetBool("IsWalkingForwardRight", Mathf.Sign(vInput) == Mathf.Sign(1) && Mathf.Sign(hInput) == Mathf.Sign(1) && vInput != 0 && hInput != 0);
+        charAnim.SetBool("IsWalkingBackward", Mathf.Sign(vInput) == Mathf.Sign(-1));
+        charAnim.SetBool("IsWalkingBackwardLeft", Mathf.Sign(vInput) == Mathf.Sign(-1) && Mathf.Sign(hInput) == Mathf.Sign(-1));
+        charAnim.SetBool("IsWalkingBackwardRight", Mathf.Sign(vInput) == Mathf.Sign(-1) && Mathf.Sign(hInput) == Mathf.Sign(1) && hInput != 0);
+        charAnim.SetBool("IsWalkingSidewaysLeft", Mathf.Sign(hInput) == Mathf.Sign(-1) && vInput == 0);
+        charAnim.SetBool("IsWalkingSidewaysRight", Mathf.Sign(hInput) == Mathf.Sign(1) && vInput == 0 && hInput != 0);
+
+
 
         if (charCon.isGrounded)
         {
@@ -99,15 +109,6 @@ public class PlayerBehavior : MonoBehaviour
         }
         charCon.Move(moveDir * Time.deltaTime);
     }
-
-   /* private void DetectRotation()
-    {
-        if (hInput != 0)
-        {
-            Vector3 rotation = Vector3.up * hInput;
-            transform.Rotate(rotation * Time.deltaTime);
-        }
-    }*/
 
     private void DetectFire()
     {
