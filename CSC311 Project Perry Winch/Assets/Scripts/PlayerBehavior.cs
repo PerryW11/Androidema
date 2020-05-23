@@ -115,7 +115,8 @@ public class PlayerBehavior : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             audWeaponFire.Play();
-            GameObject newBullet = Instantiate(bullet, this.transform.position + (this.transform.forward * 1.2f), this.transform.rotation) as GameObject;
+                                                                            // Slight in front of player - Slightly up to gun level - In front of gun
+            GameObject newBullet = Instantiate(bullet, transform.position + (transform.forward * 1.2f) + (transform.up * 0.5f) + (transform.right * 0.25f), this.transform.rotation) as GameObject;
             Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
             bulletRB.velocity = this.transform.forward * bulletSpeed;
 
