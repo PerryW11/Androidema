@@ -7,8 +7,8 @@ using UnityEditor;
 
 public class GameBehavior : MonoBehaviour
 {
-    public int maxItems = 4;
-    private int itemsCollected = 0;
+    public int maxRodon = 4;
+    private int rodonCollected = 0;
 
     [System.NonSerialized] public bool showWinScreen = false;
     [System.NonSerialized] public bool showLossScreen = false;
@@ -20,7 +20,7 @@ public class GameBehavior : MonoBehaviour
     private float myTimer;
 
     public TextMeshProUGUI txtJumpLevel;
-    public TextMeshProUGUI txtItems;
+    public TextMeshProUGUI txtRodon;
     public TextMeshProUGUI txtLives;
     public TextMeshProUGUI txtLevel;
     public TextMeshProUGUI txtTime;
@@ -51,19 +51,19 @@ public class GameBehavior : MonoBehaviour
         get { return gamePaused; }
     }
 
-    public int Items // To handle the items collected
+    public int Rodon // To handle the rodon collected
     {
 
-        get { return itemsCollected; }
+        get { return rodonCollected; }
 
         set
         {
-            itemsCollected = value;
-            Debug.LogFormat("Items: {0}", itemsCollected);
-            RefreshItemsText(itemsCollected); 
-            PlayerPrefs.SetInt("ItemsCollected", value);
+            rodonCollected = value;
+            Debug.LogFormat("Rodon: {0}", rodonCollected);
+            RefreshRodonText(rodonCollected); 
+            PlayerPrefs.SetInt("RodonCollected", value);
 
-            if (itemsCollected >= MaxItemsAdjusted) // If the items collected is greater than or equal to the max items for that specific level
+            if (rodonCollected >= MaxRodonAdjusted) // If the rodon collected is greater than or equal to the max rodon for that specific level
             {
                 if (SceneManager.GetActiveScene().buildIndex == 0) // If it's level 1
                 {
@@ -78,11 +78,11 @@ public class GameBehavior : MonoBehaviour
             }
             else
             {
-                if(itemsCollected != 0)
+                if(rodonCollected != 0)
                 {
                     if (initialized)
                     {
-                        audItemPickup.pitch = 0.9f + pickupPitchMod; // Will change pitch of audItemPickup as more items are picked up
+                        audItemPickup.pitch = 0.9f + pickupPitchMod; // Will change pitch of audItemPickup as more rodon are picked up
                         audItemPickup.Play();
                         pickupPitchMod += 0.15f;
                     }
@@ -121,14 +121,14 @@ public class GameBehavior : MonoBehaviour
 
     }
 
-    public int MaxItemsAdjusted
+    public int MaxRodonAdjusted
     {
         get
         {
-            int ret = maxItems;
+            int ret = maxRodon;
             if (SceneManager.GetActiveScene().buildIndex == 1) // If it's level 2
             {
-                ret *= 2; // Double the items required to win
+                ret *= 2; // Double the rodon required to win
             }
             return ret;
         }
@@ -139,15 +139,15 @@ public class GameBehavior : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().buildIndex == 0) // If it's level 1
         {
-            Items = 0;
+            Rodon = 0;
             Lives = 3;
         }
         else
         {
             // Checking for data to carry over in level
-            if (PlayerPrefs.HasKey("ItemsCollected"))
+            if (PlayerPrefs.HasKey("RodonCollected"))
             {
-                Items = PlayerPrefs.GetInt("ItemsCollected");
+                Rodon = PlayerPrefs.GetInt("RodonCollected");
             }
             if (PlayerPrefs.HasKey("PlayerLives"))
             {
@@ -159,7 +159,7 @@ public class GameBehavior : MonoBehaviour
             }
         }
         RefreshJumpText(2);
-        RefreshItemsText(Items);
+        RefreshRodonText(Rodon);
         RefreshLivesText(Lives);
         RefreshLevelText(SceneManager.GetActiveScene().buildIndex + 1);
         initialized = true; // Scene is fully initialized and setup
@@ -261,14 +261,14 @@ public class GameBehavior : MonoBehaviour
         }
     }
 
-    private void RefreshItemsText(int x)
+    private void RefreshRodonText(int x)
     {
-        txtItems.text = "Items: " + x.ToString() + "/" + MaxItemsAdjusted.ToString();
+        txtRodon.text = "Rodon collected: " + x.ToString() + "/" + MaxRodonAdjusted.ToString();
     }
 
     private void RefreshLivesText(int x)
     {
-        txtLives.text = "Lives: " + x.ToString() + "/3";
+        txtLives.text = "Total lives left: " + x.ToString() + "/3";
     }
 
     private void RefreshLevelText(int x)
