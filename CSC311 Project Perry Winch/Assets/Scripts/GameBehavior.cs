@@ -24,6 +24,7 @@ public class GameBehavior : MonoBehaviour
     public TextMeshProUGUI txtLives;
     public TextMeshProUGUI txtLevel;
     public TextMeshProUGUI txtTime;
+    public TextMeshProUGUI txtTimeBeat;
     public TextMeshProUGUI txtHighScore;
 
     public GameObject winScreen;
@@ -73,6 +74,19 @@ public class GameBehavior : MonoBehaviour
                 }
                 if (SceneManager.GetActiveScene().buildIndex == 1) // If it's level 2
                 {
+                    RefreshTimeBeatenText(myTimer);
+                    float bestTime = PlayerPrefs.GetFloat("BestTime");
+                    float timeCompleted = PlayerPrefs.GetFloat("TimeCompleted");
+                    if (bestTime >= timeCompleted || bestTime == 0)
+                    {
+                        PlayerPrefs.SetFloat("BestTime", timeCompleted);
+                        RefreshBestTimeText(timeCompleted);
+                    }
+                    else
+                    {
+
+                        RefreshBestTimeText(bestTime);
+                    }              
                     ShowWinScreen();
                 }
             }
@@ -82,7 +96,7 @@ public class GameBehavior : MonoBehaviour
                 {
                     if (initialized)
                     {
-                        audItemPickup.pitch = 0.9f + pickupPitchMod; // Will change pitch of audItemPickup as more rodon are picked up
+                        audItemPickup.pitch = 0.9f + pickupPitchMod; // Will change pitch of audItemPickup as more rodon is picked up
                         audItemPickup.Play();
                         pickupPitchMod += 0.15f;
                     }
@@ -157,6 +171,15 @@ public class GameBehavior : MonoBehaviour
             {
                 myTimer = PlayerPrefs.GetFloat("TimeCompleted");
             }
+
+            if(PlayerPrefs.HasKey("BestTime"))
+            {
+                Debug.Log("Best time: " + PlayerPrefs.GetFloat("BestTime"));
+            }
+            else
+            {
+                PlayerPrefs.SetFloat("BestTime", 0f);
+            }
         }
         RefreshJumpText(2);
         RefreshRodonText(Rodon);
@@ -169,10 +192,17 @@ public class GameBehavior : MonoBehaviour
     {
         if(!winScreen.activeInHierarchy || !loseScreen.activeInHierarchy || !escMenu.activeInHierarchy)
         {
-            myTimer += Time.deltaTime;
-            RefreshTimeText(myTimer);
-            PlayerPrefs.SetFloat("TimeCompleted", myTimer);
-            RefreshHighScoreText(myTimer);
+            gamePaused = false;
+            if(rodonCollected < MaxRodonAdjusted || SceneManager.GetActiveScene().buildIndex == 1) // To prevent race condition
+            {
+                myTimer += Time.deltaTime; // Increase timer for mission
+                RefreshTimeText(myTimer);
+                PlayerPrefs.SetFloat("TimeCompleted", myTimer);
+            }
+        }
+        else
+        {
+            gamePaused = true;
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -184,6 +214,18 @@ public class GameBehavior : MonoBehaviour
             {
                 ShowEscMenu();
             }
+        }
+        if(gamePaused)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Time.timeScale = 1f;
         }
     }
 
@@ -206,12 +248,10 @@ public class GameBehavior : MonoBehaviour
     private void ShowLoseScreen()
     {
         loseScreen.SetActive(true);
-        Time.timeScale = 0;
     }
     private void ShowWinScreen()
     {
         winScreen.SetActive(true);
-        Time.timeScale = 0;
     }
 
     public void RestartLevel()
@@ -281,15 +321,20 @@ public class GameBehavior : MonoBehaviour
         txtTime.text = "Time: " + x.ToString("#.000");
     }
 
-    private void RefreshHighScoreText(float x)
+    private void RefreshTimeBeatenText(float x)
     {
-        txtHighScore.text = "High Score: " + x.ToString("#.000");
+        txtTimeBeat.text = "Mission Time: " + x.ToString("#.000");
+    }
+
+    private void RefreshBestTimeText(float x)
+    {
+        txtHighScore.text = "Best Time: " + x.ToString("#.000");
     }
 
     public void ClearHighScore()
     {
         PlayerPrefs.SetFloat("TimeCompleted", 0f);
-        RefreshHighScoreText(PlayerPrefs.GetFloat("TimeCompleted"));
+        RefreshBestTimeText(PlayerPrefs.GetFloat("TimeCompleted"));
     }
 
     public void ClickedJumpIncrease()

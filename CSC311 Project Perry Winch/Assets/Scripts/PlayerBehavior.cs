@@ -112,7 +112,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private void DetectFire()
     {
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && !gameManager.GamePaused)
         {
             audWeaponFire.Play();
                                                                             // Slight in front of player - Slightly up to gun level - In front of gun

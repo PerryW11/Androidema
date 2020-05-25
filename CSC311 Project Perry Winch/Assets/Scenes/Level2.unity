@@ -298,19 +298,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a7e1ba17159d04599633bcd653a2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxItems: 4
+  maxRodon: 4
   jumpVelocity: 5
   txtJumpLevel: {fileID: 294569093}
-  txtItems: {fileID: 294569091}
-  txtLives: {fileID: 294569092}
-  txtLevel: {fileID: 294569088}
-  txtTime: {fileID: 294569094}
+  txtRodon: {fileID: 0}
+  txtLives: {fileID: 0}
+  txtLevel: {fileID: 0}
+  txtTime: {fileID: 0}
+  txtTimeBeat: {fileID: 0}
   txtHighScore: {fileID: 804564247}
   winScreen: {fileID: 294569090}
   loseScreen: {fileID: 294569089}
   levelPad: {fileID: 0}
+  levelPadDoor: {fileID: 0}
   escMenu: {fileID: 294569087}
-  teleporterTip: {fileID: 636334359}
+  teleporterTip: {fileID: 0}
   pickupPitchMod: 0
   audItemPickup: {fileID: 1831336708}
   audNextLevelAvailable: {fileID: 435046230}
@@ -348,6 +350,31 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 98733935}
+    - target: {fileID: 5486552578356385553, guid: e84e325ad6fb4c44d885030e9fa8eaff,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486552578356385553, guid: e84e325ad6fb4c44d885030e9fa8eaff,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486552578356385553, guid: e84e325ad6fb4c44d885030e9fa8eaff,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486552578356385553, guid: e84e325ad6fb4c44d885030e9fa8eaff,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486552578356385553, guid: e84e325ad6fb4c44d885030e9fa8eaff,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7016908076989942265, guid: e84e325ad6fb4c44d885030e9fa8eaff,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -496,18 +523,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 294569086}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &294569088 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7016908078464117084, guid: e84e325ad6fb4c44d885030e9fa8eaff,
-    type: 3}
-  m_PrefabInstance: {fileID: 294569086}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &294569089 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7016908077654863912, guid: e84e325ad6fb4c44d885030e9fa8eaff,
@@ -520,45 +535,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 294569086}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &294569091 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7016908078852286954, guid: e84e325ad6fb4c44d885030e9fa8eaff,
-    type: 3}
-  m_PrefabInstance: {fileID: 294569086}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &294569092 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7016908077255397768, guid: e84e325ad6fb4c44d885030e9fa8eaff,
-    type: 3}
-  m_PrefabInstance: {fileID: 294569086}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &294569093 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7016908078301396704, guid: e84e325ad6fb4c44d885030e9fa8eaff,
-    type: 3}
-  m_PrefabInstance: {fileID: 294569086}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &294569094 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1438758540, guid: e84e325ad6fb4c44d885030e9fa8eaff,
     type: 3}
   m_PrefabInstance: {fileID: 294569086}
   m_PrefabAsset: {fileID: 0}
@@ -948,12 +927,6 @@ Transform:
   m_Father: {fileID: 2122633050}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &636334359 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 652570557, guid: e84e325ad6fb4c44d885030e9fa8eaff,
-    type: 3}
-  m_PrefabInstance: {fileID: 294569086}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,7 +1217,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79564465270e2ad41a2d4745f8ed7e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camOffset: {x: 0, y: 1.8, z: -3.2}
+  target: {fileID: 0}
+  position:
+    targetPosOffset: {x: 0, y: 0.55, z: 0}
+    lookSmooth: 100
+    distanceFromTarget: -3
+    zoomSmooth: 100
+    maxZoom: -0.5
+    minZoom: -6
+    smoothFollow: 1
+    smooth: 0.05
+    newDistance: -3
+    adjustmentDistance: -3
+  orbit:
+    xRotation: -20
+    yRotation: -180
+    maxXRotation: 25
+    minXRotation: -85
+    vOrbitSmooth: 150
+    hOrbitSmooth: 150
+    orbitSpeed: 5
+  input:
+    ORBIT_HORIZONTAL_SNAP: OrbitHorizontalSnap
+    ORBIT_HORIZONTAL: OrbitHorizontal
+    ORBIT_VERTICAL: OrbitVertical
+    ZOOM: Mouse ScrollWheel
+  debug:
+    drawDesiredCollisionLines: 1
+    drawAdjustedCollisionLines: 1
+  collision:
+    collisionLayer:
+      serializedVersion: 2
+      m_Bits: 0
+    colliding: 0
+    adjustedCameraClipPoints: []
+    desiredCameraClipPoints: []
 --- !u!1001 &993215822
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1711,9 +1718,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1419853747
 MeshRenderer:
@@ -2835,7 +2842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d16e5da1805ecc341bea0d3f77f0c7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameManager: {fileID: 98733935}
+  gameManager: {fileID: 0}
   myLevel: 1
 --- !u!4 &2753309551137842681
 Transform:
