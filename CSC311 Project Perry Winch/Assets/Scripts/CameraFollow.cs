@@ -6,20 +6,14 @@ public class CameraFollow : MonoBehaviour
 {
     public float CameraMoveSpeed = 120f;
     public GameObject CameraFollowObj;
+    public GameObject CameraZoomFollowObj;
     public float clampAngle = 80f;
     public float inputSensitivity = 350f;
-    public GameObject CameraObj;
-    public GameObject PlayerObj;
-    public float camDistanceXToPlayer;
-    public float camDistanceYToPlayer;
-    public float camDistanceZToPlayer;
     public float mouseX;
     public float mouseY;
-    public float finalInputX;
-    public float smoothX;
-    public float smoothY;
     private float rotY = 0.0f;
     private float rotX = 0.0f;
+    Quaternion localRotation;
 
     private void Start()
     {
@@ -38,7 +32,7 @@ public class CameraFollow : MonoBehaviour
 
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
 
-        Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0);
+        localRotation = Quaternion.Euler(rotX, rotY, 0);
 
         transform.rotation = localRotation;
     }
@@ -50,7 +44,17 @@ public class CameraFollow : MonoBehaviour
 
     private void CameraUpdater()
     {
-        Transform target = CameraFollowObj.transform;
+        Transform target;
+        if (!Input.GetMouseButton(1))
+        {
+            target = CameraFollowObj.transform;
+        }
+        else
+        {
+            localRotation = Quaternion.Euler(0, rotY, 0);
+            transform.rotation = localRotation;
+            target = CameraZoomFollowObj.transform;
+        }
 
         float step = CameraMoveSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, target.position, step);
