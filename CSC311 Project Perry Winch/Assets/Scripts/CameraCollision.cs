@@ -21,9 +21,13 @@ public class CameraCollision : MonoBehaviour
     {
         Vector3 desiredCameraPos = transform.parent.TransformPoint(dollyDir * maxDistance);
         RaycastHit hit;
-        if(Physics.Linecast(transform.parent.position, desiredCameraPos, out hit))
+        if(Physics.Linecast(transform.parent.position, desiredCameraPos, out hit) && !hit.collider.isTrigger)
         {
-            distance = Mathf.Clamp(hit.distance * 0.87f, minDistance, maxDistance);
+            if(!(hit.transform.gameObject.name == "Player"))
+            {
+                distance = Mathf.Clamp(hit.distance * 0.87f, minDistance, maxDistance);
+            }
+
         }
         else
         {

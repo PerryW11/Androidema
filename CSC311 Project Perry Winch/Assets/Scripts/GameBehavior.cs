@@ -45,7 +45,7 @@ public class GameBehavior : MonoBehaviour
     public bool playerInvincible = false;
     public bool initialized = false;
 
-    private bool gamePaused = false;
+    private bool gamePaused = false; // If the various UI elements are on the screen, such as escape menu or win screen
 
     public bool GamePaused
     {
@@ -193,7 +193,7 @@ public class GameBehavior : MonoBehaviour
         if(!winScreen.activeInHierarchy || !loseScreen.activeInHierarchy || !escMenu.activeInHierarchy)
         {
             gamePaused = false;
-            if(rodonCollected < MaxRodonAdjusted || SceneManager.GetActiveScene().buildIndex == 1) // To prevent race condition
+            if(rodonCollected < MaxRodonAdjusted || SceneManager.GetActiveScene().buildIndex == 0) // To prevent race condition
             {
                 myTimer += Time.deltaTime; // Increase timer for mission
                 RefreshTimeText(myTimer);

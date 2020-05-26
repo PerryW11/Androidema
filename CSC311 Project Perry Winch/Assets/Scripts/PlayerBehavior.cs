@@ -61,7 +61,6 @@ public class PlayerBehavior : MonoBehaviour
         if(Input.GetMouseButton(1) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
         {
             Vector3 eulerRotation = new Vector3(transform.eulerAngles.x, cam.transform.eulerAngles.y, transform.eulerAngles.z);
-            //transform.rotation = Quaternion.Euler(eulerRotation);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(eulerRotation), Time.deltaTime * 8f);
         }
 

@@ -14,7 +14,7 @@ public class ItemBehavior : MonoBehaviour
     {
         if (other.gameObject.name == "Player")
         {
-            Destroy(this.transform.parent.gameObject);
+            Destroy(transform.parent.gameObject);
             Debug.Log("Item collected!");
             gameManager.Rodon += 1;
         }
