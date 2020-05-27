@@ -39,6 +39,7 @@ public class GameBehavior : MonoBehaviour
     public AudioSource audNextLevelAvailable;
     public AudioSource audEnemyKilled;
     public AudioSource audPlayerKilled;
+    public AudioSource audMusic;
 
 
     public PlayerBehavior scrPlayer;
@@ -185,12 +186,13 @@ public class GameBehavior : MonoBehaviour
         RefreshRodonText(Rodon);
         RefreshLivesText(Lives);
         RefreshLevelText(SceneManager.GetActiveScene().buildIndex + 1);
+        audMusic.Play();
         initialized = true; // Scene is fully initialized and setup
     }
 
     private void Update()
     {
-        if(!winScreen.activeInHierarchy || !loseScreen.activeInHierarchy || !escMenu.activeInHierarchy)
+        if(!winScreen.activeInHierarchy && !loseScreen.activeInHierarchy && !escMenu.activeInHierarchy)
         {
             gamePaused = false;
             if(rodonCollected < MaxRodonAdjusted || SceneManager.GetActiveScene().buildIndex == 0) // To prevent race condition
@@ -220,12 +222,20 @@ public class GameBehavior : MonoBehaviour
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             Time.timeScale = 0f;
+            if(audMusic.isPlaying)
+            {
+                audMusic.Pause();
+            }
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             Time.timeScale = 1f;
+            if(!audMusic.isPlaying)
+            {
+                audMusic.UnPause();
+            }
         }
     }
 

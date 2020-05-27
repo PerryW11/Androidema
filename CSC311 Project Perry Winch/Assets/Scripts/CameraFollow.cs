@@ -32,7 +32,7 @@ public class CameraFollow : MonoBehaviour
 
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
 
-        localRotation = Quaternion.Euler(rotX, rotY, 0);
+        localRotation = Quaternion.Euler(rotX, rotY, 0); 
 
         transform.rotation = localRotation;
     }
@@ -51,7 +51,7 @@ public class CameraFollow : MonoBehaviour
         }
         else
         {
-            localRotation = Quaternion.Euler(0, rotY, 0);
+            localRotation = Quaternion.Euler(0, rotY, 0); // use rotX for x if verticality is involved
             transform.rotation = localRotation;
             target = CameraZoomFollowObj.transform;
         }
