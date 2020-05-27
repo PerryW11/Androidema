@@ -8,7 +8,7 @@ public class Door : MonoBehaviour
     public GameObject door;
     public Animator doorAnim;
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.name == "Player" || other.gameObject.CompareTag("Enemy"))
         {
@@ -22,5 +22,4 @@ public class Door : MonoBehaviour
             doorAnim.SetBool("IsNearDoor", false);
         }
     }
-
 }

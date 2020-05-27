@@ -30,6 +30,8 @@ public class PlayerBehavior : MonoBehaviour
     public GameBehavior gameManager;
     public CameraFollow cam;
 
+    public GameObject spine;
+
 
     public Quaternion TargetRotation
     {
@@ -62,6 +64,9 @@ public class PlayerBehavior : MonoBehaviour
         {
             Vector3 eulerRotation = new Vector3(transform.eulerAngles.x, cam.transform.eulerAngles.y, transform.eulerAngles.z);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(eulerRotation), Time.deltaTime * 8f);
+            //charAnim.enabled = false;
+            //spine.transform.rotation = cam.transform.rotation;
+            
         }
 
         DetectMovement();
