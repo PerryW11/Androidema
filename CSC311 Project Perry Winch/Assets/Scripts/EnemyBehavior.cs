@@ -100,8 +100,6 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-  
-
     void OnTriggerExit(Collider other)
     { 
         if (other.name == "Player")
