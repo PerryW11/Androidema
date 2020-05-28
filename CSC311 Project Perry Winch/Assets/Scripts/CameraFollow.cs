@@ -14,6 +14,8 @@ public class CameraFollow : MonoBehaviour
     private float rotY = 0.0f;
     private float rotX = 0.0f;
     Quaternion localRotation;
+    public Vector3 lookLocation;
+    public GameObject target;
 
     private void Start()
     {
@@ -35,6 +37,9 @@ public class CameraFollow : MonoBehaviour
         localRotation = Quaternion.Euler(rotX, rotY, 0); 
 
         transform.rotation = localRotation;
+
+        Ray ray = new Ray(transform.position, transform.forward);
+        target.transform.position = transform.position + transform.forward - new Vector3(0, 0.5f, 0);
     }
 
     private void LateUpdate()
@@ -51,7 +56,7 @@ public class CameraFollow : MonoBehaviour
         }
         else
         {
-            localRotation = Quaternion.Euler(0, rotY, 0); // use rotX for x if verticality is involved
+            localRotation = Quaternion.Euler(rotX, rotY, 0); // use rotX for x if verticality is involved
             transform.rotation = localRotation;
             target = CameraZoomFollowObj.transform;
         }

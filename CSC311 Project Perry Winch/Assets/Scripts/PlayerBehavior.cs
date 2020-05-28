@@ -5,11 +5,8 @@ using UnityEngine.EventSystems;
 
 public class PlayerBehavior : MonoBehaviour
 {
-    public float moveSpeed = 10f;
-    public float rotateSpeed = 150f;
-    public float distanceToGround = 0.1f;
-    public LayerMask groundLayer;
-    private float gravity = 8f;
+    public float moveSpeed = 4f;
+    private float gravity = 10f;
 
     public GameObject bullet;
     public float bulletSpeed = 60f;
@@ -30,7 +27,10 @@ public class PlayerBehavior : MonoBehaviour
     public GameBehavior gameManager;
     public CameraFollow cam;
 
-    public GameObject spine;
+    public Transform spine;
+    public GameObject target;
+    public Vector3 offset;
+    public bool IsIdle;
 
 
     public Quaternion TargetRotation
@@ -50,6 +50,11 @@ public class PlayerBehavior : MonoBehaviour
         charCon = GetComponent<CharacterController>();
         targetRotation = transform.rotation;
         gameManager = FindObjectOfType<GameBehavior>();
+        spine = charAnim.GetBoneTransform(HumanBodyBones.Spine);
+        if(charAnim.isHuman)
+        {
+            Debug.Log("Is humanoid");
+        }
        // gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
 
@@ -58,37 +63,47 @@ public class PlayerBehavior : MonoBehaviour
     {
         vInput = Input.GetAxis("Vertical") * moveSpeed;
         hInput = Input.GetAxis("Horizontal") * moveSpeed;
+        IsIdle = hInput == 0 && vInput == 0 ? true : false;
         //targetRotation *= Quaternion.AngleAxis(hInput * Time.deltaTime, Vector3.up);
-        
-        if(Input.GetMouseButton(1) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
         {
             Vector3 eulerRotation = new Vector3(transform.eulerAngles.x, cam.transform.eulerAngles.y, transform.eulerAngles.z);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(eulerRotation), Time.deltaTime * 8f);
-            //charAnim.enabled = false;
-            //spine.transform.rotation = cam.transform.rotation;
-            
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(eulerRotation), Time.deltaTime * 8f); // Lerp player model to camera's rotation
         }
-
         DetectMovement();
-       // DetectRotation();
         DetectFire();
         
     }
+    private void LateUpdate()
+    {
+        if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        {
+            spine.LookAt(cam.target.transform.position);
+            spine.rotation *= Quaternion.Euler(offset);
+        }
+    }
 
-    
+
 
     private void DetectMovement()
     {
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            moveSpeed *= 1.1f;
+            charAnim.SetFloat("PosX", Input.GetAxis("Horizontal"));
+            charAnim.SetFloat("PosY", Input.GetAxis("Vertical"));
 
-        //Animations for player movement
-        charAnim.SetBool("IsWalkingForward", Mathf.Sign(vInput) == Mathf.Sign(1) && vInput != 0);
-        charAnim.SetBool("IsWalkingForwardLeft", Mathf.Sign(vInput) == Mathf.Sign(1) && Mathf.Sign(hInput) == Mathf.Sign(-1) && vInput != 0);
-        charAnim.SetBool("IsWalkingForwardRight", Mathf.Sign(vInput) == Mathf.Sign(1) && Mathf.Sign(hInput) == Mathf.Sign(1) && vInput != 0 && hInput != 0);
-        charAnim.SetBool("IsWalkingBackward", Mathf.Sign(vInput) == Mathf.Sign(-1));
-        charAnim.SetBool("IsWalkingBackwardLeft", Mathf.Sign(vInput) == Mathf.Sign(-1) && Mathf.Sign(hInput) == Mathf.Sign(-1));
-        charAnim.SetBool("IsWalkingBackwardRight", Mathf.Sign(vInput) == Mathf.Sign(-1) && Mathf.Sign(hInput) == Mathf.Sign(1) && hInput != 0);
-        charAnim.SetBool("IsWalkingSidewaysLeft", Mathf.Sign(hInput) == Mathf.Sign(-1) && vInput == 0);
-        charAnim.SetBool("IsWalkingSidewaysRight", Mathf.Sign(hInput) == Mathf.Sign(1) && vInput == 0 && hInput != 0);
+        }
+        else
+        {
+            moveSpeed /= 1.1f;
+            charAnim.SetFloat("PosX", Input.GetAxis("Horizontal") / 2);
+            charAnim.SetFloat("PosY", Input.GetAxis("Vertical") / 2);
+        }
+        moveSpeed = Mathf.Clamp(moveSpeed, 4f, 7f);
+
+        
+        
 
 
 
@@ -109,21 +124,39 @@ public class PlayerBehavior : MonoBehaviour
         {
             moveDir = new Vector3(hInput, moveDir.y, vInput);
             moveDir = transform.TransformDirection(moveDir);
-            moveDir.y -= gravity * Time.deltaTime;
+            moveDir.y -= gravity* Time.deltaTime;
         }
-        charCon.Move(moveDir * Time.deltaTime);
+        charCon.Move(moveDir* Time.deltaTime);
     }
+    
 
     private void DetectFire()
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && !gameManager.GamePaused)
         {
+            GameObject newBullet;
             audWeaponFire.Play();
-                                                                            // Slight in front of player - Slightly up to gun level - In front of gun
-            GameObject newBullet = Instantiate(bullet, transform.position + (transform.forward * 1.2f) + (transform.up * 0.5f) + (transform.right * 0.25f), this.transform.rotation) as GameObject;
+            if(IsIdle)
+            {
+                newBullet = Instantiate(bullet, spine.transform.position + (spine.transform.forward * 1.2f) + (spine.transform.up * 0.25f) + (spine.transform.right * -0.7f), spine.transform.rotation) as GameObject;
+            }
+            else
+            {
+                newBullet = Instantiate(bullet, spine.transform.position + (spine.transform.forward * 1.2f) + (spine.transform.up * 0.25f) + (spine.transform.right * -0.7f), spine.transform.rotation) as GameObject;
+            }
+           
+           
             Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
-            bulletRB.velocity = this.transform.forward * bulletSpeed;
-
+            if(Input.GetMouseButton(1) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            {
+                bulletRB.velocity = cam.transform.forward * bulletSpeed; // Shoot in camera's direction
+            }
+            else
+            {
+                bulletRB.velocity = transform.forward * bulletSpeed; // Shoot in player model's direction
+            }
+            
+            // If enemy is within this sphere, it will hear the gun shot and look for the player to attack
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, 100);
             int i = 0;
             while(i < hitColliders.Length)
@@ -140,7 +173,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(!gameManager.playerInvincible)
+        if (!gameManager.playerInvincible && collision.gameObject.CompareTag("Enemy"))
         {
             StartCoroutine(TempInvincibility());
         }
