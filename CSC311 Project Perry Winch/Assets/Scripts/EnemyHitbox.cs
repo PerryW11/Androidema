@@ -6,9 +6,11 @@ public class EnemyHitbox : MonoBehaviour
 {
     public EnemyBehavior scrEnemy;
 
+    
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.name == "Player")
+        //If the player was just hit by the enemy
+        if (other.gameObject.name == "Player")
         {
             scrEnemy.HandlePlayerContact();
         }

@@ -6,24 +6,23 @@ using UnityEngine.AI;
 public class EnemyBehavior : MonoBehaviour
 {
     public Transform patrolRoute;
-
     public List<Transform> locations;
-
     private int locationIndex = 0;
-
     private GameBehavior gameManager;
+    private EnemySightSphere sight;
 
     public Animator charAnim;
-
     public Transform player;
-
+    private PlayerBehavior scrPlayer;
     private NavMeshAgent agent;
-
     public GameObject gobExclamation;
+    public AudioSource audHit;
 
-    private int _lives = 3;
+    private int hitCounter = 0;
 
-    private bool damagedPlayer = false;
+    private int lives = 5;
+
+    private bool damagedPlayer = false; //If the player was just hit by the enemy
     public bool DamagedPlayer
     {
         get
@@ -34,12 +33,12 @@ public class EnemyBehavior : MonoBehaviour
     public int EnemyLives
     {
         
-        get { return _lives; }
+        get { return lives; }
 
         private set
         {
-            _lives = value;
-            if (_lives <= 0)
+            lives = value;
+            if (lives <= 0)
             {
                 gameManager.EnemyKilled();
                 Destroy(this.gameObject);
@@ -53,11 +52,33 @@ public class EnemyBehavior : MonoBehaviour
         gameManager = FindObjectOfType<GameBehavior>();
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player").transform;
+        scrPlayer = GameObject.Find("Player").GetComponent<PlayerBehavior>();
         InitializePatrolRoute();
         MoveToNextPatrolLocation();
+        sight = GetComponentInChildren<EnemySightSphere>();
     }
     void Update()
     {
+        //Sprint when player is seen, walk when player isn't seen
+        if (sight.playerFound)
+        {
+            agent.speed = 3f;
+        }
+        else
+        {
+            agent.speed = 2f;
+        }
+
+        if (agent.speed == 2)
+        {
+            charAnim.SetBool("IsWalking", true);
+            charAnim.SetBool("IsRunning", false);
+        }
+        if(agent.speed == 3f)
+        {
+            charAnim.SetBool("IsRunning", true);
+            charAnim.SetBool("IsWalking", false);
+        }
         if (agent.remainingDistance < 0.2f && !agent.pathPending)
         {
             MoveToNextPatrolLocation();
@@ -71,6 +92,7 @@ public class EnemyBehavior : MonoBehaviour
             locations.Add(child);
         }
     }
+
     void MoveToNextPatrolLocation()
     {
         if (locations.Count == 0)
@@ -79,15 +101,16 @@ public class EnemyBehavior : MonoBehaviour
         
         agent.destination = locations[locationIndex].position;
         locationIndex = (locationIndex + 1) % locations.Count;
-        charAnim.SetBool("IsWalking", true);
         gobExclamation.SetActive(false);
     }
 
-    public void HandlePlayerSight()
+    //What the enemy does if the player is seen
+    public void HandlePlayerSight() 
     {
         gobExclamation.SetActive(true);
         agent.destination = player.position;
         Debug.Log("Player detected - attack!");
+        sight.playerFound = true;
     }
 
     public void HandlePlayerContact()
@@ -96,12 +119,27 @@ public class EnemyBehavior : MonoBehaviour
         if(!gameManager.playerInvincible)
         {
             gameManager.Lives -= 1;
+            //To play player hurt sounds as long as it's not the last life being lost
+            if(gameManager.Lives != 0)
+            {
+                if (hitCounter == 0)
+                {
+                    scrPlayer.audPlayerHurtOne.Play();
+                }
+                if (hitCounter == 1)
+                {
+                    scrPlayer.audPlayerHurtTwo.Play();
+                    hitCounter = -1;
+                }
+                hitCounter++;
+            }
             MoveToNextPatrolLocation();
         }
     }
 
     void OnTriggerExit(Collider other)
     { 
+        //Player is out of sight sphere
         if (other.name == "Player")
         {
             Debug.Log("Player out of range, resume patrol");
@@ -110,9 +148,14 @@ public class EnemyBehavior : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
+        //If shot by the player
         if (collision.gameObject.name == "Bullet(Clone)")
         {
             EnemyLives -= 1;
+            if(EnemyLives != 0)
+            {
+                audHit.Play();
+            }
             Debug.Log("Enemy has been shot!");
         }
     }
