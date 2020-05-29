@@ -20,6 +20,8 @@ public class PlayerBehavior : MonoBehaviour
     public Animator charAnim;
 
     public AudioSource audWeaponFire;
+    public AudioSource audPlayerHurtOne;
+    public AudioSource audPlayerHurtTwo;
 
     //private Rigidbody _rb;
     private CapsuleCollider col;
@@ -76,6 +78,7 @@ public class PlayerBehavior : MonoBehaviour
     }
     private void LateUpdate()
     {
+        //Player looks in camera's direction if these buttons are held down
         if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
         {
             spine.LookAt(cam.target.transform.position);
@@ -87,6 +90,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private void DetectMovement()
     {
+        //If sprinting with left shift
         if(Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed *= 1.1f;
@@ -147,6 +151,8 @@ public class PlayerBehavior : MonoBehaviour
            
            
             Rigidbody bulletRB = newBullet.GetComponent<Rigidbody>();
+
+            //If spine rotation is being set to camera's rotation
             if(Input.GetMouseButton(1) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
             {
                 bulletRB.velocity = cam.transform.forward * bulletSpeed; // Shoot in camera's direction
@@ -157,7 +163,7 @@ public class PlayerBehavior : MonoBehaviour
             }
             
             // If enemy is within this sphere, it will hear the gun shot and look for the player to attack
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, 100);
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, 20f);
             int i = 0;
             while(i < hitColliders.Length)
             {
@@ -173,6 +179,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        //If the player's invincibility frames aren't active
         if (!gameManager.playerInvincible && collision.gameObject.CompareTag("Enemy"))
         {
             StartCoroutine(TempInvincibility());

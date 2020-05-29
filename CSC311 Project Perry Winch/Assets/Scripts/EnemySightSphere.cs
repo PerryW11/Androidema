@@ -8,6 +8,7 @@ public class EnemySightSphere : MonoBehaviour
     private Transform trnPlayer;
     private Vector3 origin;
     private Vector3 direction;
+    public bool playerFound = false;
 
     private void Start()
     {
@@ -29,12 +30,16 @@ public class EnemySightSphere : MonoBehaviour
             {
                 Ray ray = new Ray(origin, direction);
                 bool hit = Physics.Raycast(ray, out RaycastHit rayHit);
+                //If the player is in the line of sight of the enemy
                 if (hit)
                 {
                     if (rayHit.transform.gameObject.name == "Player")
                     {
                         scrEnemy.HandlePlayerSight();
-
+                    }
+                    else
+                    {
+                        playerFound = false;
                     }
                 }
             }
