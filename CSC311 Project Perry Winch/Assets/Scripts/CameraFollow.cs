@@ -7,6 +7,7 @@ public class CameraFollow : MonoBehaviour
     public float CameraMoveSpeed = 120f;
     public GameObject CameraFollowObj;
     public GameObject CameraZoomFollowObj;
+    public GameObject crosshair;
     public float clampAngle = 80f;
     public float inputSensitivity = 350f;
     public float mouseX;
@@ -53,12 +54,20 @@ public class CameraFollow : MonoBehaviour
         if (!Input.GetMouseButton(1))
         {
             target = CameraFollowObj.transform;
+            if(crosshair.activeInHierarchy)
+            {
+                crosshair.SetActive(false);
+            }
         }
         else
         {
             localRotation = Quaternion.Euler(rotX, rotY, 0); // use rotX for x if verticality is involved
             transform.rotation = localRotation;
             target = CameraZoomFollowObj.transform;
+            if(!crosshair.activeInHierarchy)
+            {
+                crosshair.SetActive(true);
+            }
         }
 
         float step = CameraMoveSpeed * Time.deltaTime;

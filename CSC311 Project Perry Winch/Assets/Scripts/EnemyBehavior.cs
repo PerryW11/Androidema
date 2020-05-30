@@ -62,7 +62,7 @@ public class EnemyBehavior : MonoBehaviour
         //Sprint when player is seen, walk when player isn't seen
         if (sight.playerFound)
         {
-            agent.speed = 3f;
+            agent.speed = 5.5f;
         }
         else
         {
@@ -74,7 +74,7 @@ public class EnemyBehavior : MonoBehaviour
             charAnim.SetBool("IsWalking", true);
             charAnim.SetBool("IsRunning", false);
         }
-        if(agent.speed == 3f)
+        if(agent.speed == 5.5f)
         {
             charAnim.SetBool("IsRunning", true);
             charAnim.SetBool("IsWalking", false);

@@ -40,6 +40,7 @@ public class GameBehavior : MonoBehaviour
     public AudioSource audEnemyKilled;
     public AudioSource audPlayerKilled;
     public AudioSource audMusic;
+    public AudioSource audTeleporterOpen;
 
 
     public PlayerBehavior scrPlayer;
@@ -254,6 +255,7 @@ public class GameBehavior : MonoBehaviour
     {
         levelPad.SetActive(true);
         levelPadDoor.SetActive(false);
+        audTeleporterOpen.Play();
     }
     private void ShowLoseScreen()
     {
@@ -273,6 +275,10 @@ public class GameBehavior : MonoBehaviour
     private void ShowEscMenu()
     {
         escMenu.SetActive(true);
+    }
+    public void HideEscMenu()
+    {
+        escMenu.SetActive(false);
     }
 
     public void QuitGame()

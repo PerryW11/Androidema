@@ -35,6 +35,7 @@ public class EnemySightSphere : MonoBehaviour
                 {
                     if (rayHit.transform.gameObject.name == "Player")
                     {
+                        playerFound = true;
                         scrEnemy.HandlePlayerSight();
                     }
                     else
