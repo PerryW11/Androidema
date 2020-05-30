@@ -5,6 +5,7 @@ using UnityEngine;
 public class ButtonLights : MonoBehaviour
 {
     Renderer rend;
+    private bool isChanging = false;
 
     private void Start()
     {
@@ -13,6 +14,25 @@ public class ButtonLights : MonoBehaviour
 
     private void Update()
     {
-        rend.material.SetColor("_Color", Random.ColorHSV());
+        if(!isChanging)
+        {
+            CallChangeColor();
+        }
+    }
+
+    private void CallChangeColor()
+    {
+        StartCoroutine(ChangeColor());
+    }
+
+    IEnumerator ChangeColor()
+    {
+        if(!isChanging)
+        {
+            isChanging = true;
+            rend.material.SetColor("_Color", Random.ColorHSV());
+            yield return new WaitForSeconds(2f);
+            isChanging = false;
+        }   
     }
 }

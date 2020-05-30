@@ -34,6 +34,11 @@ public class PlayerBehavior : MonoBehaviour
     public Vector3 offset;
     public bool IsIdle;
 
+    public float stamina = 100f; 
+    private bool regenStamina = false; // To check if player is currently regening stamina
+    private float timeSinceSprint = 0;
+        
+    
 
     public Quaternion TargetRotation
     {
@@ -47,7 +52,6 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Start()
     {
-       // _rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
         charCon = GetComponent<CharacterController>();
         targetRotation = transform.rotation;
@@ -57,7 +61,6 @@ public class PlayerBehavior : MonoBehaviour
         {
             Debug.Log("Is humanoid");
         }
-       // gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
 
 
@@ -91,8 +94,10 @@ public class PlayerBehavior : MonoBehaviour
     private void DetectMovement()
     {
         //If sprinting with left shift
-        if(Input.GetKey(KeyCode.LeftShift))
+        if(Input.GetKey(KeyCode.LeftShift) && stamina > 0)
         {
+            timeSinceSprint = 0f;
+            stamina -= 0.2f;
             moveSpeed *= 1.1f;
             charAnim.SetFloat("PosX", Input.GetAxis("Horizontal"));
             charAnim.SetFloat("PosY", Input.GetAxis("Vertical"));
@@ -100,6 +105,11 @@ public class PlayerBehavior : MonoBehaviour
         }
         else
         {
+            timeSinceSprint += Time.deltaTime;
+            if(!regenStamina && stamina < 100f)
+            {
+                CallSprintRegent();
+            }
             moveSpeed /= 1.1f;
             charAnim.SetFloat("PosX", Input.GetAxis("Horizontal") / 2);
             charAnim.SetFloat("PosY", Input.GetAxis("Vertical") / 2);
@@ -115,6 +125,8 @@ public class PlayerBehavior : MonoBehaviour
         {
             moveDir = new Vector3(hInput, 0, vInput);
             moveDir = transform.TransformDirection(moveDir);
+            
+            //Jump when space is pressed
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 moveDir.y = gameManager.jumpVelocity;
@@ -124,13 +136,14 @@ public class PlayerBehavior : MonoBehaviour
                 moveDir.y = -0.5f;
             }
         }
+
         else
         {
             moveDir = new Vector3(hInput, moveDir.y, vInput);
             moveDir = transform.TransformDirection(moveDir);
-            moveDir.y -= gravity* Time.deltaTime;
+            moveDir.y -= gravity* Time.deltaTime; // Fall due to set gravity
         }
-        charCon.Move(moveDir* Time.deltaTime);
+        charCon.Move(moveDir * Time.deltaTime);
     }
     
 
@@ -205,5 +218,41 @@ public class PlayerBehavior : MonoBehaviour
         }
         mr.enabled = false;
         gameManager.playerInvincible = false;
+    }
+
+    public void CallSprintRegent()
+    {
+        StartCoroutine(SprintRegen());
+    }
+
+    IEnumerator SprintRegen()
+    {
+        //If stamina is drained or if it's been 3 seconds since the player has sprinted 
+        if(stamina <= 0 || timeSinceSprint > 3f && stamina != 0)
+        {
+            regenStamina = true;
+            yield return new WaitForSeconds(2.5f);
+            while(stamina < 100f && !Input.GetKey(KeyCode.LeftShift))
+            {
+                stamina += 2;
+                if(stamina > 100f)
+                {
+                    stamina = 100f;
+                }
+                else
+                {
+                    yield return new WaitForSeconds(0.05f);
+                }                
+            }
+
+            regenStamina = false;
+
+        }
+
+        if(stamina == 100f)
+        {
+            regenStamina = false;
+        }
+
     }
 }
