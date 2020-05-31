@@ -47,7 +47,7 @@ public class GrapplingGun : MonoBehaviour
     private void StartGrapple()
     {
         RaycastHit hit;
-        if(Physics.Raycast(cam.position, cam.forward, out hit, maxDistance))
+        if(Physics.Raycast(player.transform.position, cam.forward, out hit, maxDistance))
         {
             isGrappling = true;
             grapplePoint = hit.point;
@@ -87,7 +87,7 @@ public class GrapplingGun : MonoBehaviour
         
     }
 
-   /* IEnumerator Grappled()
+    /* IEnumerator Grappled()
     {
         
     } */

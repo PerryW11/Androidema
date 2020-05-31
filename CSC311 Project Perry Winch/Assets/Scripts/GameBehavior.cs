@@ -17,7 +17,8 @@ public class GameBehavior : MonoBehaviour
     private float jumpLevel1 = 3f;
     private float jumpLevel2 = 5f;
     private float jumpLevel3 = 10f;
-    private float myTimer;
+    [HideInInspector]
+    public float myTimer;
 
     public TextMeshProUGUI txtJumpLevel;
     public TextMeshProUGUI txtRodon;
@@ -47,6 +48,10 @@ public class GameBehavior : MonoBehaviour
     public bool playerInvincible = false;
     public bool initialized = false;
 
+    //CODE IS WRITTEN IN EXPECTATION TO MAYBE ADD LEVELS IN THE FUTURE
+    //for now only 1 level is created
+
+    
     private bool gamePaused = false; // If the various UI elements are on the screen, such as escape menu or win screen
 
     public bool GamePaused
@@ -73,23 +78,6 @@ public class GameBehavior : MonoBehaviour
                     audNextLevelAvailable.Play();
                     ShowLevelPad();
                     teleporterTip.SetActive(true);
-                }
-                if (SceneManager.GetActiveScene().buildIndex == 1) // If it's level 2
-                {
-                    RefreshTimeBeatenText(myTimer);
-                    float bestTime = PlayerPrefs.GetFloat("BestTime");
-                    float timeCompleted = PlayerPrefs.GetFloat("TimeCompleted");
-                    if (bestTime >= timeCompleted || bestTime == 0)
-                    {
-                        PlayerPrefs.SetFloat("BestTime", timeCompleted);
-                        RefreshBestTimeText(timeCompleted);
-                    }
-                    else
-                    {
-
-                        RefreshBestTimeText(bestTime);
-                    }              
-                    ShowWinScreen();
                 }
             }
             else
@@ -261,7 +249,7 @@ public class GameBehavior : MonoBehaviour
     {
         loseScreen.SetActive(true);
     }
-    private void ShowWinScreen()
+    public void ShowWinScreen()
     {
         winScreen.SetActive(true);
     }
@@ -337,12 +325,12 @@ public class GameBehavior : MonoBehaviour
         txtTime.text = "Time: " + x.ToString("#.000");
     }
 
-    private void RefreshTimeBeatenText(float x)
+    public void RefreshTimeBeatenText(float x)
     {
         txtTimeBeat.text = "Mission Time: " + x.ToString("#.000");
     }
 
-    private void RefreshBestTimeText(float x)
+    public void RefreshBestTimeText(float x)
     {
         txtHighScore.text = "Best Time: " + x.ToString("#.000");
     }
