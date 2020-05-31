@@ -141,7 +141,7 @@ public class PlayerBehavior : MonoBehaviour
         {
             moveDir = new Vector3(hInput, moveDir.y, vInput);
             moveDir = transform.TransformDirection(moveDir);
-            moveDir.y -= gravity* Time.deltaTime; // Fall due to set gravity
+            moveDir.y -= gravity * Time.deltaTime; // Fall due to set gravity
         }
         charCon.Move(moveDir * Time.deltaTime);
     }
