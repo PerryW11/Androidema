@@ -37,8 +37,9 @@ public class PlayerBehavior : MonoBehaviour
     public float stamina = 100f; 
     private bool regenStamina = false; // To check if player is currently regening stamina
     private float timeSinceSprint = 0;
-        
-    
+
+
+
 
     public Quaternion TargetRotation
     {
@@ -57,10 +58,6 @@ public class PlayerBehavior : MonoBehaviour
         targetRotation = transform.rotation;
         gameManager = FindObjectOfType<GameBehavior>();
         spine = charAnim.GetBoneTransform(HumanBodyBones.Spine);
-        if(charAnim.isHuman)
-        {
-            Debug.Log("Is humanoid");
-        }
     }
 
 
@@ -75,10 +72,18 @@ public class PlayerBehavior : MonoBehaviour
             Vector3 eulerRotation = new Vector3(transform.eulerAngles.x, cam.transform.eulerAngles.y, transform.eulerAngles.z);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(eulerRotation), Time.deltaTime * 8f); // Lerp player model to camera's rotation
         }
-        DetectMovement();
+        if(charCon.enabled)
+        {
+            DetectMovement();
+        }
+        else
+        {
+
+        }
         DetectFire();
         
     }
+
     private void LateUpdate()
     {
         //Player looks in camera's direction if these buttons are held down
@@ -114,12 +119,8 @@ public class PlayerBehavior : MonoBehaviour
             charAnim.SetFloat("PosX", Input.GetAxis("Horizontal") / 2);
             charAnim.SetFloat("PosY", Input.GetAxis("Vertical") / 2);
         }
+
         moveSpeed = Mathf.Clamp(moveSpeed, 4f, 7f);
-
-        
-        
-
-
 
         if (charCon.isGrounded)
         {
@@ -144,8 +145,11 @@ public class PlayerBehavior : MonoBehaviour
             moveDir.y -= gravity * Time.deltaTime; // Fall due to set gravity
         }
         charCon.Move(moveDir * Time.deltaTime);
-    }
-    
+    } 
+
+
+
+
 
     private void DetectFire()
     {

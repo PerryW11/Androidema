@@ -11,7 +11,22 @@ public class LevelTriggerPad : MonoBehaviour
     {
         if(other.gameObject.name == "Player")
         {
-            gameManager.LoadLevel(myLevel);
+            
+            gameManager.RefreshTimeBeatenText(gameManager.myTimer);
+            float bestTime = PlayerPrefs.GetFloat("BestTime");
+            float timeCompleted = PlayerPrefs.GetFloat("TimeCompleted");
+            if (bestTime >= timeCompleted || bestTime == 0)
+            {
+                PlayerPrefs.SetFloat("BestTime", timeCompleted);
+                gameManager.RefreshBestTimeText(timeCompleted);
+            }
+            else
+            {
+
+                gameManager.RefreshBestTimeText(bestTime);
+            }
+            gameManager.ShowWinScreen();
+            
         }
     }
 }
