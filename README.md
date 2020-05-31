@@ -1,15 +1,19 @@
-# Androidema (Work in progress)
+# Androidema 
+
+![ScreenShot](https://i.imgur.com/mI2Znrb.jpg)
 
 You have been programmed to serve your people. Your specialty is combat and destruction.
 
 Your creators want the one thing that keeps this vast galaxy thriving, and that is rodon.
 
-Rodon is a precious resource that brings longevity and life, inciting new behaviors to the DNA (or circuitry) of a being.
+![ScreenShot](https://i.imgur.com/YWPh5t9.jpg)
 
-This incites a burst of evolutionary traits. Without it, your kind is considered of lesser stature.
+Rodon is a precious resource that brings longevity and life, and you've been tasked with extracting it from a secretive alien base.
 
-Rodon is needed, as life on your planet shall slowly decend into a whirlpool of chaos and greed in its absence.
+Collect it faster each time you play through to beat your own time!
 
-Do what is necessary to ensure the extraction of this precious material. 
+![ScreenShot](https://i.imgur.com/C2dYEb7.jpg)
 
-[Work in progress being made with Unity]
+Created with the Unity engine
+
+
